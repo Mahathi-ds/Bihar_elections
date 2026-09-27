@@ -1,9 +1,11 @@
 import json
+import sys
 import os
 from pathlib import Path
 
 from youtube_transcript_api import YouTubeTranscriptApi
-
+sys.stdout.reconfigure(encoding="utf-8")
+sys.stderr.reconfigure(encoding="utf-8")
 
 JSON_FILE = "cleaned_videos_metadata.json"
 OUTPUT_FOLDER = "transcripts"
