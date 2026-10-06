@@ -1,6 +1,5 @@
 import os
 import re
-import json
 import time
 from pathlib import Path
 
@@ -8,42 +7,39 @@ import pandas as pd
 from dotenv import load_dotenv
 from groq import Groq
 
-
 # ============================================================
-# 1. CONFIGURATION
-# ============================================================
-
-BASE_DIR = Path(__file__).resolve().parent
-RESULTS_DIR = BASE_DIR / "results" / "qwen_manifesto_results"
-
-RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-
-load_dotenv(BASE_DIR / ".env")
-
-API_KEY = os.getenv("GROQ_API_KEY")
-MODEL = os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
-
-if not API_KEY:
-    raise ValueError(
-        "GROQ_API_KEY was not found.\n"
-        f"Create a .env file at: {BASE_DIR}"
-    )
-
-client = Groq(api_key=API_KEY)
-
-
-# ============================================================
-# 2. INPUT FOLDERS -- one folder per manifesto, chunk_N.txt inside
+# PATHS  (script lives in Bihar_elections/chunk_analysis/)
 # ============================================================
 
-CHUNK_FOLDERS = {
-    "MGB": BASE_DIR / "chunks" / "manifestoes" / "MGB_Manifesto_new",
-    "NDA": BASE_DIR / "chunks" / "manifestoes" / "NDA_Manifesto_new",
+ROOT = Path(__file__).resolve().parent.parent          # Bihar_elections/
+CHUNKS_BASE = ROOT / "chunks" / "manifestoes"
+RESULTS_BASE = ROOT / "results" / "manifesto_results"
+
+MANIFESTOS = {
+    "MGB": CHUNKS_BASE / "MGB_Manifesto_new",
+    "NDA": CHUNKS_BASE / "NDA_Manifesto_new",
 }
 
+# Output: results/manifesto_results/<PARTY>/qwen.csv
+OUTPUT_NAME = "qwen.csv"
 
 # ============================================================
-# 3. BIHAR CATEGORIES (14)
+# API SETUP
+# ============================================================
+
+load_dotenv(ROOT / ".env")
+API_KEY = os.getenv("GROQ_API_KEY")
+if not API_KEY:
+    raise ValueError(f"GROQ_API_KEY not found. Check {ROOT / '.env'}")
+
+MODEL = os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
+client = Groq(api_key=API_KEY)
+
+SLEEP_BETWEEN_CALLS = 2      # seconds
+MAX_ATTEMPTS = 3
+
+# ============================================================
+# CATEGORIES (14)
 # ============================================================
 
 CATEGORIES = [
@@ -63,352 +59,184 @@ CATEGORIES = [
     "Others",
 ]
 
-UNCLASSIFIED = "Unclassified / Error"
-MAX_ATTEMPTS = 3
+CATEGORY_LOOKUP = {c.lower(): c for c in CATEGORIES}
+
+
+def match_category(value):
+    """Return exact official category name, or None if not valid."""
+    if value is None:
+        return None
+    cleaned = re.sub(r"[*_`]", "", str(value)).strip().lower()
+    return CATEGORY_LOOKUP.get(cleaned)
 
 
 # ============================================================
-# 4. CATEGORY VALIDATION
+# PROMPT (identical to the Gemini prompt)
 # ============================================================
 
-def normalize_label(value):
-    """Normalize a category label for matching."""
-    value = str(value or "").strip().lower()
-    value = re.sub(r"^\s*\d+\s*[\.\):\-]?\s*", "", value)
-    value = re.sub(r"\s+", " ", value)
-    return value.strip()
+def build_prompt(text):
+    return f"""
+You are a political analyst for Bihar 2025 elections.
 
+Choose the **most dominant category** as the Main category and if there is a clear second important category, mention it as the Secondary category.
 
-CATEGORY_LOOKUP = {
-    normalize_label(category): category
-    for category in CATEGORIES
-}
+Categories:
+{chr(10).join([f"- {cat}" for cat in CATEGORIES])}
 
-
-def validate_category(value, allow_empty=False):
-    """Return the exact official category label or None."""
-    if value is None or not str(value).strip():
-        return "" if allow_empty else None
-    return CATEGORY_LOOKUP.get(normalize_label(value))
-
-
-# ============================================================
-# 5. READ CHUNK FILES
-# ============================================================
-
-def load_chunks():
-    all_chunks = []
-
-    for party, folder_path in CHUNK_FOLDERS.items():
-        if not folder_path.exists():
-            raise FileNotFoundError(f"Missing folder: {folder_path}")
-
-        chunk_files = [f for f in os.listdir(folder_path) if f.endswith(".txt")]
-        chunk_files.sort(key=lambda f: int(f.replace("chunk_", "").replace(".txt", "")))
-
-        for chunk_file in chunk_files:
-            chunk_path = folder_path / chunk_file
-            with open(chunk_path, "r", encoding="utf-8") as f:
-                text = f.read().strip()
-
-            if text:
-                all_chunks.append({
-                    "party": party,
-                    "chunk_id": chunk_file,
-                    "text": text,
-                })
-            else:
-                print(f"WARNING: Empty chunk skipped: {party} / {chunk_file}")
-
-    return all_chunks
-
-
-# ============================================================
-# 6. PARSE THE MODEL RESPONSE
-# ============================================================
-
-def parse_json_response(content):
-    """Extract JSON even if the model surrounds it with text."""
-    content = content.strip()
-    content = re.sub(r"^\s*```(?:json)?\s*", "", content, flags=re.IGNORECASE)
-    content = re.sub(r"\s*```\s*$", "", content)
-
-    start = content.find("{")
-    end = content.rfind("}")
-
-    if start == -1 or end == -1 or end < start:
-        raise ValueError(f"No JSON object found in response: {content[:300]}")
-
-    return json.loads(content[start:end + 1])
-
-
-# ============================================================
-# 7. CLASSIFY ONE CHUNK
-# ============================================================
-
-def classify_chunk(chunk):
-    text = chunk["text"]
-
-    prompt = f"""
-You are analysing a political party's election manifesto
-for the Bihar 2025 elections, for an academic text-classification project.
-
-Classify the following manifesto text into ONE dominant
-category from the exact list below.
-
-CATEGORIES:
-{json.dumps(CATEGORIES, ensure_ascii=False)}
-
-RULES:
-1. Choose exactly one main_category from the list.
-2. Return the category label exactly as written in the list.
-3. Use "Others" only when the text genuinely does not
-   fit any of the other thirteen categories.
-4. Do not use "Others" just because the text is difficult
-   to understand.
-5. If the text is genuinely too corrupted or incomplete
-   to classify, set main_category to null and explain why.
-6. A mention of an opposition party is not automatically
-   "Content about the Opposition party". Use that category only when
-   the content is specifically about the opposition party.
-7. Classify based on the text provided, not your opinion
-   about any party.
-8. Do not invent promises or facts.
-9. Return valid JSON only. Do not include Markdown fences.
-
-JSON format:
-{{
-  "main_category": "exact category label or null",
-  "secondary_category": "exact category label or null",
-  "reason": "brief explanation in English"
-}}
-
-MANIFESTO TEXT:
+Text:
 {text}
+
+Instructions:
+- If the text clearly contains a substantial second theme that could be classified into a different category, also give that as the Secondary category.
+- Provide a Secondary category only when there is genuine ambiguity or a clearly important second theme.
+- Do NOT provide a Secondary category just because another category is mentioned briefly.
+- The Main and Secondary categories must be different.
+- Both categories MUST be exactly from the list above.
+- Do not invent, modify, or combine category names.
+- If there is no clear second category, write "Secondary: None".
+
+Format:
+Main: Category Name
+Secondary: Category Name
+
+Examples:
+
+Main: Agriculture and Farmers
+Secondary: Welfare and Funds
 """
 
-    last_error = None
 
+def parse_response(response_text):
+    """Parse 'Main: ...' / 'Secondary: ...' lines. Returns (main, secondary)."""
+    # Qwen models may emit <think>...</think> reasoning; drop it
+    response_text = re.sub(r"<think>.*?</think>", "", response_text, flags=re.DOTALL).strip()
+
+    main_raw, sec_raw = None, None
+    for line in response_text.splitlines():
+        line = re.sub(r"[*_`]", "", line).strip()
+        if line.lower().startswith("main:"):
+            main_raw = line.split(":", 1)[1].strip()
+        elif line.lower().startswith("secondary:"):
+            sec_raw = line.split(":", 1)[1].strip()
+
+    main_cat = match_category(main_raw)
+    if main_cat is None:
+        raise ValueError(f"Invalid Main category: {main_raw!r}")
+
+    sec_cat = None
+    if sec_raw and sec_raw.lower() != "none":
+        sec_cat = match_category(sec_raw)
+        if sec_cat is None:
+            print(f"  WARNING: invalid Secondary '{sec_raw}' -> ignored")
+        elif sec_cat == main_cat:
+            sec_cat = None
+
+    return main_cat, sec_cat
+
+
+def classify_chunk(text):
+    last_error = None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
             response = client.chat.completions.create(
                 model=MODEL,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "You are a careful academic text "
-                            "classifier. Follow the category "
-                            "definitions exactly. Return JSON only."
-                        ),
-                    },
-                    {"role": "user", "content": prompt},
-                ],
+                messages=[{"role": "user", "content": build_prompt(text)}],
                 temperature=0.1,
-                max_tokens=400,
+                max_tokens=1500,   # room in case the model emits reasoning first
             )
-
             content = response.choices[0].message.content
             if not content:
-                raise ValueError("The model returned an empty response.")
+                raise ValueError("Empty response from model")
 
-            data = parse_json_response(content)
-
-            main_category = validate_category(data.get("main_category"))
-            if main_category is None:
-                raise ValueError(
-                    f"Missing or invalid main_category: {data.get('main_category')!r}"
-                )
-
-            secondary_category = validate_category(
-                data.get("secondary_category"), allow_empty=True
-            )
-            if secondary_category == main_category:
-                secondary_category = ""
-
+            main_cat, sec_cat = parse_response(content.strip())
             return {
-                "main_category": main_category,
-                "secondary_category": secondary_category or "",
-                "reason": str(data.get("reason", "")).strip(),
-                "classification_status": "success",
-                "error_message": "",
+                "Primary_Category": main_cat,
+                "Secondary_Category": sec_cat or "",
+                "Status": "success",
+                "Error": "",
             }
-
-        except Exception as exc:
-            last_error = exc
-            print(f"  Attempt {attempt}/{MAX_ATTEMPTS} failed: {type(exc).__name__}: {exc}")
+        except Exception as e:
+            last_error = e
+            print(f"  Attempt {attempt}/{MAX_ATTEMPTS} failed: {type(e).__name__}: {e}")
             if attempt < MAX_ATTEMPTS:
-                time.sleep(2 * attempt)
+                time.sleep(5 * attempt)
 
     return {
-        "main_category": "",
-        "secondary_category": "",
-        "reason": "",
-        "classification_status": "error",
-        "error_message": str(last_error)[:1000],
+        "Primary_Category": "",
+        "Secondary_Category": "",
+        "Status": "error",
+        "Error": str(last_error)[:500],
     }
 
 
 # ============================================================
-# 8. CHECKPOINT AND RESUME
+# PROCESS ONE MANIFESTO (with resume support)
 # ============================================================
 
-DETAIL_PATH = RESULTS_DIR / "qwen_classified_chunks.csv"
+def process_manifesto(party, folder_path):
+    print("\n" + "=" * 60)
+    print(f"Processing manifesto: {party}  |  Model: {MODEL}")
+    print(f"Chunks folder: {folder_path}")
+    print("=" * 60)
 
-
-def save_checkpoint(results_by_key):
-    if not results_by_key:
+    if not folder_path.exists():
+        print(f"WARNING: Folder not found: {folder_path}")
         return
-    df = pd.DataFrame(list(results_by_key.values()))
-    df.to_csv(DETAIL_PATH, index=False, encoding="utf-8-sig")
 
+    out_dir = RESULTS_BASE / party
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / OUTPUT_NAME
 
-def load_previous_successes():
-    previous = {}
-    if not DETAIL_PATH.exists():
-        return previous
+    chunk_files = [f for f in os.listdir(folder_path) if f.endswith(".txt")]
+    chunk_files.sort(key=lambda f: int(re.sub(r"\D", "", f) or 0))
+    print(f"Chunks found: {len(chunk_files)}")
 
-    try:
-        df = pd.read_csv(DETAIL_PATH, encoding="utf-8-sig", keep_default_na=False)
-        required = {"party", "chunk_id", "main_category", "classification_status"}
+    # Resume: keep previously successful rows
+    results = {}
+    if out_path.exists():
+        try:
+            old = pd.read_csv(out_path, encoding="utf-8-sig", keep_default_na=False)
+            for _, row in old.iterrows():
+                if row.get("Status") == "success":
+                    results[row["Chunk"]] = row.to_dict()
+            print(f"Resuming: {len(results)} chunks already done")
+        except Exception as e:
+            print(f"Could not read old {OUTPUT_NAME}, starting fresh: {e}")
 
-        if not required.issubset(df.columns):
-            print("Old checkpoint has an unexpected format; starting fresh.")
-            return {}
-
-        for _, row in df.iterrows():
-            if row["classification_status"] != "success":
-                continue
-            category = validate_category(row["main_category"])
-            if category is None:
-                continue
-            key = (str(row["party"]), str(row["chunk_id"]))
-            previous[key] = row.to_dict()
-
-    except Exception as exc:
-        print(f"Could not read previous checkpoint: {exc}")
-        return {}
-
-    return previous
-
-
-# ============================================================
-# 9. CLASSIFY ALL CHUNKS
-# ============================================================
-
-def run_classification():
-    chunks = load_chunks()
-
-    print("=" * 60)
-    print("QWEN BIHAR MANIFESTO CLASSIFICATION")
-    print("=" * 60)
-    print(f"Model: {MODEL}")
-    print(f"Chunks loaded: {len(chunks)}")
-
-    results_by_key = load_previous_successes()
-    print(f"Successful chunks loaded from checkpoint: {len(results_by_key)}")
-
-    for index, chunk in enumerate(chunks, start=1):
-        key = (chunk["party"], chunk["chunk_id"])
-        if key in results_by_key:
+    for i, chunk_file in enumerate(chunk_files, start=1):
+        if chunk_file in results:
             continue
 
-        print(f"[{index}/{len(chunks)}] {chunk['party']} - {chunk['chunk_id']}")
+        print(f"\nClassifying {chunk_file} ({i}/{len(chunk_files)})...")
+        with open(folder_path / chunk_file, "r", encoding="utf-8") as f:
+            text = f.read().strip()
 
-        classification = classify_chunk(chunk)
-        result = {**chunk, **classification}
-        results_by_key[key] = result
-        save_checkpoint(results_by_key)
+        if not text:
+            print("  Empty chunk, skipped.")
+            continue
 
-        if classification["classification_status"] == "success":
-            print(f"  Category: {classification['main_category']}")
-        else:
-            print("  Classification failed; saved for retry.")
+        result = {"Party": party, "Chunk": chunk_file, **classify_chunk(text)}
+        results[chunk_file] = result
+        print(f"  Main: {result['Primary_Category']} | Secondary: {result['Secondary_Category'] or 'None'}")
 
-    ordered_results = [
-        results_by_key[(chunk["party"], chunk["chunk_id"])]
-        for chunk in chunks
-        if (chunk["party"], chunk["chunk_id"]) in results_by_key
-    ]
+        # checkpoint after every chunk
+        pd.DataFrame(list(results.values())).to_csv(out_path, index=False, encoding="utf-8-sig")
+        time.sleep(SLEEP_BETWEEN_CALLS)
 
-    results_df = pd.DataFrame(ordered_results)
-    results_df.to_csv(DETAIL_PATH, index=False, encoding="utf-8-sig")
+    ordered = [results[c] for c in chunk_files if c in results]
+    df = pd.DataFrame(ordered)
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
 
-    create_summaries(results_df)
-
-    print("\n" + "=" * 60)
-    print("CLASSIFICATION FINISHED")
-    print("=" * 60)
-    print(f"Input chunks: {len(chunks)}")
-    print(f"Result rows: {len(results_df)}")
-    print(f"Successful: {(results_df['classification_status'] == 'success').sum()}")
-    print(f"Errors: {(results_df['classification_status'] != 'success').sum()}")
-    print(f"Detailed results: {DETAIL_PATH}")
-    print(f"Summary workbook: {RESULTS_DIR / 'qwen_summary.xlsx'}")
+    errors = (df["Status"] != "success").sum() if len(df) else 0
+    print(f"\nSaved: {out_path} ({len(df)} chunks, {errors} errors)")
+    if errors:
+        print("Re-run the script to retry the failed chunks.")
 
 
-# ============================================================
-# 10. CREATE SUMMARY TABLES
-# ============================================================
+def main():
+    for party, folder_path in MANIFESTOS.items():
+        process_manifesto(party, folder_path)
 
-def create_summaries(results_df):
-    summary_rows = []
-    overview_rows = []
-
-    for party in CHUNK_FOLDERS:
-        party_df = results_df[results_df["party"] == party]
-        total_chunks = len(party_df)
-        successful_df = party_df[party_df["classification_status"] == "success"]
-        successful_chunks = len(successful_df)
-        error_count = int((party_df["classification_status"] != "success").sum())
-
-        overview_rows.append({
-            "party": party,
-            "total_chunks": total_chunks,
-            "successful_chunks": successful_chunks,
-            "unclassified_count": error_count,
-            "success_percentage": (
-                round(successful_chunks / total_chunks * 100, 2) if total_chunks else 0
-            ),
-        })
-
-        category_counts = successful_df["main_category"].value_counts().to_dict()
-
-        for category in CATEGORIES:
-            count = int(category_counts.get(category, 0))
-            summary_rows.append({
-                "party": party,
-                "category": category,
-                "chunk_count": count,
-                "percentage": round(count / total_chunks * 100, 2) if total_chunks else 0,
-            })
-
-        summary_rows.append({
-            "party": party,
-            "category": UNCLASSIFIED,
-            "chunk_count": error_count,
-            "percentage": round(error_count / total_chunks * 100, 2) if total_chunks else 0,
-        })
-
-    category_summary = pd.DataFrame(summary_rows)
-    party_overview = pd.DataFrame(overview_rows)
-
-    category_summary.to_csv(RESULTS_DIR / "qwen_category_summary.csv", index=False, encoding="utf-8-sig")
-    party_overview.to_csv(RESULTS_DIR / "qwen_party_overview.csv", index=False, encoding="utf-8-sig")
-
-    workbook_path = RESULTS_DIR / "qwen_summary.xlsx"
-    with pd.ExcelWriter(workbook_path, engine="openpyxl") as writer:
-        category_summary.to_excel(writer, sheet_name="Category Summary", index=False)
-        party_overview.to_excel(writer, sheet_name="Party Overview", index=False)
-        results_df.to_excel(writer, sheet_name="Detailed Results", index=False)
-
-    print("\nParty overview:")
-    print(party_overview.to_string(index=False))
-
-
-# ============================================================
-# 11. MAIN
-# ============================================================
 
 if __name__ == "__main__":
-    run_classification()
+    main()

@@ -1,17 +1,43 @@
-from dotenv import load_dotenv
 import os
-import pandas as pd
+import re
 import time
 from pathlib import Path
+
+import pandas as pd
+from dotenv import load_dotenv
 import google.generativeai as genai
 
 # ============================================================
-# LOAD API KEY
+# PATHS  (script lives in Bihar_elections/chunk_analysis/)
 # ============================================================
 
-load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel("gemini-3.1-flash-lite")
+ROOT = Path(__file__).resolve().parent.parent          # Bihar_elections/
+CHUNKS_BASE = ROOT / "chunks" / "manifestoes"
+RESULTS_BASE = ROOT / "results" / "manifesto_results"
+
+MANIFESTOS = {
+    "MGB": CHUNKS_BASE / "MGB_Manifesto_new",
+    "NDA": CHUNKS_BASE / "NDA_Manifesto_new",
+}
+
+# Output: results/manifesto_results/<PARTY>/gemini.csv
+OUTPUT_NAME = "gemini.csv"
+
+# ============================================================
+# API SETUP
+# ============================================================
+
+load_dotenv(ROOT / ".env")
+API_KEY = os.getenv("GEMINI_API_KEY")
+if not API_KEY:
+    raise ValueError(f"GEMINI_API_KEY not found. Check {ROOT / '.env'}")
+
+genai.configure(api_key=API_KEY)
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite")
+model = genai.GenerativeModel(MODEL_NAME)
+
+SLEEP_BETWEEN_CALLS = 8      # seconds (rate limiting)
+MAX_ATTEMPTS = 3
 
 # ============================================================
 # CATEGORIES (14)
@@ -34,20 +60,23 @@ CATEGORIES = [
     "Others",
 ]
 
+CATEGORY_LOOKUP = {c.lower(): c for c in CATEGORIES}
+
+
+def match_category(value):
+    """Return exact official category name, or None if not valid."""
+    if value is None:
+        return None
+    cleaned = re.sub(r"[*_`]", "", str(value)).strip().lower()
+    return CATEGORY_LOOKUP.get(cleaned)
+
+
 # ============================================================
-# FOLDERS: one folder per manifesto, chunks directly inside
-# Adjust paths below if your layout differs
+# PROMPT (same prompt used for Qwen)
 # ============================================================
 
-BASE_FOLDER = Path("chunks/manifestoes")
-MANIFESTOS = {
-    "MGB": BASE_FOLDER / "MGB_Manifesto_new",
-    "NDA": BASE_FOLDER / "NDA_Manifesto_new",
-}
-
-
-def classify_chunk(text):
-    prompt = f"""
+def build_prompt(text):
+    return f"""
 You are a political analyst for Bihar 2025 elections.
 
 Choose the **most dominant category** as the Main category and if there is a clear second important category, mention it as the Secondary category.
@@ -76,73 +105,121 @@ Examples:
 Main: Agriculture and Farmers
 Secondary: Welfare and Funds
 """
-    try:
-        response = model.generate_content(prompt)
-        return response.text.strip()
-    except Exception as e:
-        print("Error:", e)
-        return None
 
+
+def parse_response(response_text):
+    """Parse 'Main: ...' / 'Secondary: ...' lines. Returns (main, secondary)."""
+    main_raw, sec_raw = None, None
+    for line in response_text.splitlines():
+        line = re.sub(r"[*_`]", "", line).strip()
+        if line.lower().startswith("main:"):
+            main_raw = line.split(":", 1)[1].strip()
+        elif line.lower().startswith("secondary:"):
+            sec_raw = line.split(":", 1)[1].strip()
+
+    main_cat = match_category(main_raw)
+    if main_cat is None:
+        raise ValueError(f"Invalid Main category: {main_raw!r}")
+
+    sec_cat = None
+    if sec_raw and sec_raw.lower() != "none":
+        sec_cat = match_category(sec_raw)
+        if sec_cat is None:
+            print(f"  WARNING: invalid Secondary '{sec_raw}' -> ignored")
+        elif sec_cat == main_cat:
+            sec_cat = None
+
+    return main_cat, sec_cat
+
+
+def classify_chunk(text):
+    last_error = None
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        try:
+            response = model.generate_content(build_prompt(text))
+            main_cat, sec_cat = parse_response(response.text.strip())
+            return {
+                "Primary_Category": main_cat,
+                "Secondary_Category": sec_cat or "",
+                "Status": "success",
+                "Error": "",
+            }
+        except Exception as e:
+            last_error = e
+            print(f"  Attempt {attempt}/{MAX_ATTEMPTS} failed: {type(e).__name__}: {e}")
+            if attempt < MAX_ATTEMPTS:
+                time.sleep(5 * attempt)
+
+    return {
+        "Primary_Category": "",
+        "Secondary_Category": "",
+        "Status": "error",
+        "Error": str(last_error)[:500],
+    }
+
+
+# ============================================================
+# PROCESS ONE MANIFESTO (with resume support)
+# ============================================================
 
 def process_manifesto(party, folder_path):
     print("\n" + "=" * 60)
     print(f"Processing manifesto: {party}")
-    print(f"Folder: {folder_path}")
+    print(f"Chunks folder: {folder_path}")
     print("=" * 60)
 
-    if not os.path.exists(folder_path):
+    if not folder_path.exists():
         print(f"WARNING: Folder not found: {folder_path}")
         return
 
-    chunk_files = [f for f in os.listdir(folder_path) if f.endswith(".txt")]
-    chunk_files.sort(key=lambda f: int(f.replace("chunk_", "").replace(".txt", "")))
+    out_dir = RESULTS_BASE / party
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / OUTPUT_NAME
 
+    chunk_files = [f for f in os.listdir(folder_path) if f.endswith(".txt")]
+    chunk_files.sort(key=lambda f: int(re.sub(r"\D", "", f) or 0))
     print(f"Chunks found: {len(chunk_files)}")
 
-    detailed_results = []
+    # Resume: keep previously successful rows
+    results = {}
+    if out_path.exists():
+        try:
+            old = pd.read_csv(out_path, encoding="utf-8-sig", keep_default_na=False)
+            for _, row in old.iterrows():
+                if row.get("Status") == "success":
+                    results[row["Chunk"]] = row.to_dict()
+            print(f"Resuming: {len(results)} chunks already done")
+        except Exception as e:
+            print(f"Could not read old {OUTPUT_NAME}, starting fresh: {e}")
 
     for i, chunk_file in enumerate(chunk_files, start=1):
-        print(f"\nClassifying {chunk_file} ({i}/{len(chunk_files)})...")
-
-        chunk_path = os.path.join(folder_path, chunk_file)
-        with open(chunk_path, "r", encoding="utf-8") as f:
-            text = f.read()
-
-        response = classify_chunk(text)
-        if response is None:
-            print(f"Skipping {chunk_file} because classification failed.")
+        if chunk_file in results:
             continue
-        print("Response:", response)
 
-        time.sleep(8)
+        print(f"\nClassifying {chunk_file} ({i}/{len(chunk_files)})...")
+        with open(folder_path / chunk_file, "r", encoding="utf-8") as f:
+            text = f.read().strip()
 
-        main_cat, secondary_cat = None, None
-        for line in response.splitlines():
-            if line.startswith("Main:"):
-                main_cat = line.replace("Main:", "").strip()
-            elif line.startswith("Secondary:"):
-                secondary_cat = line.replace("Secondary:", "").strip()
+        if not text:
+            print("  Empty chunk, skipped.")
+            continue
 
-        if main_cat not in CATEGORIES:
-            print(f"WARNING: Invalid category returned: {main_cat}")
-            main_cat = "Others"
-        if secondary_cat == "None":
-            secondary_cat = None
-        elif secondary_cat not in CATEGORIES:
-            print(f"WARNING: Invalid category returned: {secondary_cat}")
+        result = {"Party": party, "Chunk": chunk_file, **classify_chunk(text)}
+        results[chunk_file] = result
+        print(f"  Main: {result['Primary_Category']} | Secondary: {result['Secondary_Category'] or 'None'}")
 
-        detailed_results.append({
-            "Chunk": chunk_file,
-            "Primary_Category": main_cat,
-            "Secondary_Category": secondary_cat,
-        })
+        # checkpoint after every chunk
+        pd.DataFrame(list(results.values())).to_csv(out_path, index=False, encoding="utf-8-sig")
+        time.sleep(SLEEP_BETWEEN_CALLS)
 
-    os.makedirs("results", exist_ok=True)
-    output_base = Path("results") / f"Manifesto_{party}"
-    detailed_df = pd.DataFrame(detailed_results)
-    detailed_df.to_csv(f"{output_base}_detailed.csv", index=False, encoding="utf-8-sig")
+    ordered = [results[c] for c in chunk_files if c in results]
+    df = pd.DataFrame(ordered)
+    df.to_csv(out_path, index=False, encoding="utf-8-sig")
 
-    print(f"\nSaved: {output_base}_detailed.csv ({len(detailed_df)} chunks)")
+    errors = (df["Status"] != "success").sum() if len(df) else 0
+    print(f"\nSaved: {out_path} ({len(df)} chunks, {errors} errors)")
+    if errors:
+        print("Re-run the script to retry the failed chunks.")
 
 
 def main():
