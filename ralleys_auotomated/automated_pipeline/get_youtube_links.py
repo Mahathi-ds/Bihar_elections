@@ -422,22 +422,61 @@ def main():
     # print(f"Total unique videos: {len(videos)}")
     # print(f"==============================")
 
-    # Now deduplicate videos covering the SAME real-world event
+    # # Now deduplicate videos covering the SAME real-world event
 
-    with open("videos.json", "r", encoding="utf-8") as f:
-        videos = json.load(f)
-    print(f"Loaded {len(videos)} videos from videos.json")
+    # with open("videos.json", "r", encoding="utf-8") as f:
+    #     videos = json.load(f)
+    # print(f"Loaded {len(videos)} videos from videos.json")
 
-    groups = group_similar_videos(
-        videos,
-        title_threshold=0.7
-    )
+    
 
-    print(f"\nFound {len(groups)} unique event groups")
+    # groups = group_similar_videos(
+    #     videos,
+    #     title_threshold=0.7
+    # )
 
-    unique_videos = select_best_from_groups(groups)
+    # print(f"\nFound {len(groups)} unique event groups")
 
-    print(f"After event dedup: {len(unique_videos)} videos")
+    # unique_videos = select_best_from_groups(groups)
+
+    # print(f"After event dedup: {len(unique_videos)} videos")
+
+
+    #dividing mgb and nda videos
+
+
+    
+    
+
+    with open("cleaned_videos_metadata.json", "r", encoding="utf-8") as f:
+                videos2 = json.load(f)
+    print(f"Loaded {len(videos2)} videos from cleaned_videos_metadata.json")
+    
+    mgb_videos = []
+    nda_videos = []
+
+    for video in videos2:
+        if video.get("party") == "Mahagathbandhan":
+            mgb_videos.append(video)
+
+        elif video.get("party") == "NDA":
+            nda_videos.append(video)
+
+    with open("cleaned_videos_metadata_mgb.json", "w", encoding="utf-8") as f:
+        json.dump(mgb_videos, f, ensure_ascii=False, indent=2)
+    
+    with open("cleaned_videos_metadata_nda.json", "w", encoding="utf-8") as f:
+        json.dump(nda_videos, f, ensure_ascii=False, indent=2)
+
+ 
+            
+
+            
+            
+            
+
+            
+        
 
 if __name__ == "__main__":
     main()
