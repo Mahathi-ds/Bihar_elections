@@ -45,7 +45,7 @@ def split_text_into_chunks(input_file, output_folder, chunk_size=150):
 # PROCESS ALL SPEECH TRANSCRIPTS
 # ============================================================
 
-parties = ['NDA','Mahagathbandhan']
+parties = ['NDA']
 
 for party in parties:
 
@@ -66,6 +66,8 @@ for party in parties:
         speech_name = os.path.splitext(
             os.path.basename(transcript_file)
         )[0]
+        if speech_name in os.listdir(output_base):
+            continue
 
         output_folder = os.path.join(
             output_base,

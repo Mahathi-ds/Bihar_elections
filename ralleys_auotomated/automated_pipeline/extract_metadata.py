@@ -373,7 +373,7 @@ def extract_metadata():
 
 
 
-    with open("video_metadata.json","w",encoding="utf-8") as f:
+    with open("cleaned_videos_metadata.json","w",encoding="utf-8") as f:
             json.dump(metadata,f,indent=4,ensure_ascii=False)
 def main():
 

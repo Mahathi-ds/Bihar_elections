@@ -1,1 +1,10 @@
-﻿
+﻿Chunk,Primary_Category,Secondary_Category
+chunk_1.txt,Content about the Opposition party,Governance
+chunk_2.txt,Content about the Opposition party,Governance
+chunk_3.txt,Content about the Opposition party,Governance
+chunk_4.txt,Content about the Opposition party,Education
+chunk_5.txt,Education,Content about the Opposition party
+chunk_6.txt,Health,Social justice and Deprived communities
+chunk_7.txt,Social justice and Deprived communities,Content about the Opposition party
+chunk_8.txt,Content about the Opposition party,Social justice and Deprived communities
+chunk_9.txt,Content about the Opposition party,Governance

@@ -11,411 +11,290 @@ import google.generativeai as genai
 # # LOAD API KEY
 # # ============================================================
 
-# load_dotenv()
-
-# genai.configure(api_key=os.getenv("gemini_api_key"))
-
-# model = genai.GenerativeModel("gemini-3.1-flash-lite")
-
-
-# # ============================================================
-# # CATEGORIES
-# # ============================================================
-
-# CATEGORIES = [
-#     "Agriculture and Farmers",
-#     "Women’s Development",
-#     "Education",
-#     "Women Empowerment",
-#     "Health",
-#     "Governance",
-#     "Infrastructure",
-#     "Religion and Culture",
-#     "Social justice and Deprived communities",
-#     "Law and Order",
-#     "Welfare and Funds",
-#     "Divyang Welfare",
-#     "Content about the Opposition party",
-#     "Others"
-# ]
-
-
-# #  ============================================================
-
-# # EXCEL_FILE = (
-# #     "/Users/ctrl2/OneDrive/Documents/Annotation sheet.xlsx"
-# # )
-
-# # df=pd.read_excel(EXCEL_FILE)
-
-# def classify_chunk(text):
-#     prompt = f"""
-# You are a political analyst for Tamil Nadu 2026 elections.
-
-# Choose the **most dominant category** as the Main category and if there is a clear second important category, mention it as the econdary category.
-
-# Categories:
-# {chr(10).join([f"- {cat}" for cat in CATEGORIES])}
-
-# Text:
-# {text}
-
-# Instructions:
-# - If the text clearly contains a substantial second theme that could  be classified into a different category, also give that as the Secondary category.
-# - Provide a Secondary category only when there is genuine ambiguity or a clearly important second theme.
-# - Do NOT provide a Secondary category just because another category is mentioned briefly.
-# - The Main and Secondary categories must be different.
-# - Both categories MUST be exactly from the list above.
-# - Do not invent, modify, or combine category names.
-# - If there is no clear second category, write "Secondary: None".
-
-# Format:
-# Main: Category Name
-# Secondary: Category Name
-
-# Examples:
-
-# Main: Agriculture and Farmers
-# Secondary: Welfare and Funds
-# """
-
-
-
-#     try:
-#         response = model.generate_content(prompt)
-
-#         return response.text.strip()
-
-#     except Exception as e:
-#         print("Error:", e)
-#         return "Main: None\nSecondary: None"
-
-
-# def process_speech(party,speech_name, folder_path):
-
-#     print("\n" + "=" * 60)
-#     print(f"Processing: {speech_name}")
-#     print(f"Folder: {folder_path}")
-#     print("=" * 60)
-
-#     # --------------------------------------------------------
-#     # Get all chunk files
-#     # --------------------------------------------------------
-
-#     chunk_files = [
-#         f for f in os.listdir(folder_path)
-#         if f.endswith(".txt")
-#     ]
-
-#     chunk_files.sort(
-#         key=lambda f: int(
-#             f.replace("chunk_", "").replace(".txt", "")
-#         )
-#     )
-
-#     print("\n" + "=" * 60)
-    
-#     print(f"Speech: {speech_name}")
-#     print(f"Chunks: {len(chunk_files)}")
-#     print("=" * 60)
-
-     
-#     detailed_results=[]
-#     for i, chunk_file in enumerate(chunk_files, start=1):
-
-#         print(
-#             f"\nClassifying {chunk_file} "
-#             f"({i}/{len(chunk_files)})..."
-#         )
-
-#         chunk_path = os.path.join(folder_path, chunk_file)
-
-#         with open(chunk_path, "r", encoding="utf-8") as f:
-#             text = f.read()
-
-#         response = classify_chunk(text)
-#         if response==None:
-#             print(f"Skipping {chunk_file} because classification failed.")
-#             continue
-#         print("Response:", response)
-
-
-
-#         # Wait between requests
-#         time.sleep(8)
-
-#         # ----------------------------------------------------
-#         # Extract categories
-#         # ----------------------------------------------------
-        
-#         main_cat = None
-#         secondary_cat = None
-
-#         for line in response.splitlines():
-#             if line.startswith("Main:"):
-#                 main_cat = line.replace("Main:", "").strip()
-
-#             elif line.startswith("Secondary:"):
-#                 secondary_cat = line.replace("Secondary:", "").strip()     
-
-#         # Make sure returned category is valid
-#         if main_cat not in CATEGORIES:
-#             print(f"WARNING: Invalid category returned: {main_cat}")
-#             main_cat = "Others"
-#         if secondary_cat == "None":
-#                 secondary_cat = None
-#         elif secondary_cat not in CATEGORIES:
-#             print( f"WARNING: Invalid category returned: {secondary_cat}"
-#                         )
-            
-
-#         detailed_results.append({
-#             # "Party": party,
-#             # "Speech": speech_name,
-#             "Chunk": chunk_file,
-#             "Primary_Category": main_cat,
-#             "Secondary_Category": secondary_cat
-#         })
-
-        
-
-#         time.sleep(8)
-
-#     os.makedirs("results", exist_ok=True)
-        
-#     output_base = Path("results") / speech_name
-
-#     output_base.parent.mkdir(parents=True, exist_ok=True)
-
-#     detailed_df = pd.DataFrame(detailed_results)
-#     detailed_df.to_csv(f"{output_base}_detailed.csv", index=False, encoding="utf-8-sig")
-
-# #SAVE RESULTS
-
-
-# BASE_FOLDER = "/Users/ctrl2/Desktop/election_manifest_OELP/chunks/speeches"
-   
-# for party in ["TVK"]:
-
-#     party_folder = os.path.join(BASE_FOLDER, party)
-
-#     if not os.path.exists(party_folder):
-
-#         print(
-#             f"\nWARNING: Folder not found: "
-#             f"{party_folder}"
-#         )
-
-#         continue
-
-
-    
-
-#     speech_folders = [folder for folder in os.listdir(party_folder)
-#         if os.path.isdir( os.path.join(party_folder,folder))]
-
-#     print(
-#             f"\nFound {len(speech_folders)} speeches "
-#             f"for {party}"
-#         )
-
-#     for speech_name in sorted(speech_folders):
-
-#         speech_folder = os.path.join(
-#             party_folder,
-#             speech_name
-#         )
-
-
-
-#         process_speech(
-#             party=party,
-#             speech_name=speech_name,
-#             folder_path=speech_folder
-        # )    
-
-import pandas as pd
-from pathlib import Path
-
-BASE_FOLDER = Path("/Users/ctrl2/Desktop/election_manifest_OELP/chunks/speeches")
-RESULTS_FOLDER = Path("results")
-EXCEL_FILE = "/Users/ctrl2/OneDrive/Documents/Annotation sheet.xlsx"
-
-COLUMNS = [
-    "id",
-    "party",
-    "speaker",
-    "speech",
-    "chunk",
-
-    "annotator_1_primary",
-    "annotator_1_secondary",
-    "annotator_2_primary",
-    "annotator_2_secondary",
-    "annotator_3_primary",
-    "annotator_3_secondary",
-
-    "annotators_primary_agreement",
-    "annotators_secondary_agreement",
-
-    "GPT model",
-    "GPT_primary",
-    "GPT_secondary",
-
-    "GEMINI model",
-    "GEMINI_primary",
-    "GEMINI_secondary",
-
-    "LLAMA model",
-    "LLAMA_primary",
-    "LLAMA_secondary"
+load_dotenv()
+
+genai.configure(api_key=os.getenv("gemini_api_key_new"))
+
+model = genai.GenerativeModel("gemini-3.1-flash-lite")
+
+
+# ============================================================
+# CATEGORIES
+# ============================================================
+
+CATEGORIES = [
+    "Agriculture and Farmers",
+    "Women’s Development",
+    "Education",
+    "Women Empowerment",
+    "Health",
+    "Governance",
+    "Infrastructure",
+    "Religion and Culture",
+    "Social justice and Deprived communities",
+    "Law and Order",
+    "Welfare and Funds",
+    "Divyang Welfare",
+    "Already executed promises",
+    "Content about the Opposition party",
+    "Others"
 ]
 
-all_rows = []
 
-for party in ["AIADMK", "DMK","TVK"]:
+#  ============================================================
 
-    party_folder = BASE_FOLDER / party
+# EXCEL_FILE = (
+#     "/Users/ctrl2/OneDrive/Documents/Annotation sheet.xlsx"
+# )
 
-    print("\n" + "=" * 70)
-    print(f"RECOVERING {party}")
-    print("=" * 70)
+# df=pd.read_excel(EXCEL_FILE)
 
-    if not party_folder.exists():
-        print(f"WARNING: {party_folder} does not exist")
-        continue
+def classify_chunk(text):
+    prompt = f"""
+    You are a political analyst for Bihar 2025 elections.
 
-    speech_folders = sorted(
-        [folder for folder in party_folder.iterdir() if folder.is_dir()]
+    Choose the *most dominant category* as the Main category and if there is a clear second important category, mention it as the Secondary category.
+    
+    
+    Categories:
+    {chr(10).join([f"- {cat}" for cat in CATEGORIES])}
+
+    Text:
+    {text}
+
+    Instructions:
+    - If the text clearly contains a substantial second theme that could be classified into a different category, also give that as the Secondary category.
+    - Provide a Secondary category only when there is genuine ambiguity or a clearly important second theme.
+    - Do NOT provide a Secondary category just because another category is mentioned briefly.
+    - The Main and Secondary categories must be different.
+    - Both categories MUST be exactly from the list above.
+    - Do not invent, modify, or combine category names.
+    - If there is no clear second category, write "Secondary: None".
+    -Also mention the follwoing clearly
+       1) Main reason:mention the texts directly from the chunk which made the chunk classified into that particular category primarily
+       2)secondary reason:mention the texts directly from the chunk which made the chunk classified into that particular category primarily
+    -Leave the secondary reason "None" if there is not secondary category 
+    -Leave both Main reason and secondary reason "None" when the category is "Others"
+    
+
+    About the category "Already executed promises":
+    - Use it ONLY when the speaker claims that a specific promise, scheme, project or commitment made by their party or government has actually been delivered or completed (for example: "we promised free bus travel for women and we have implemented it", "the hospital we announced has been built and opened").
+    - When a chunk does describe such a delivered promise, choose "Already executed promises" as the Main category and None as the secondary category
+    - Past tense alone does NOT make a chunk "Already executed promises". Classify by its topic instead in these cases:
+    - recounting history, past events, or past leaders' lives without claiming a delivered promise
+    - criticising the opposition's past actions or failures (use "Content about the Opposition party")
+    - personal stories, anecdotes, or descriptions of past rallies or meetings
+    - a past promise that the speaker says was NOT fulfilled or was broken
+    - vague boasts with no identifiable promise, scheme, or work (e.g. "we did a lot of good work")
+    - future promises or plans, even if worded with "will have done"
+
+    Format:
+    Main: Category Name
+    Main reason:Reason
+    Secondary: Category Name
+    Secondary reason: Reason
+
+
+    Examples:
+
+    Main: Agriculture and Farmers
+    Secondary: Welfare and Funds
+
+    Main: Already executed promises
+    Main reason:Reason
+    Secondary: None
+    Secondary reason: None
+
+    """
+
+
+    try:
+        response = model.generate_content(prompt)
+
+        return response.text.strip()
+
+    except Exception as e:
+        print("Error:", e)
+        return "Main: None\nSecondary: None"
+
+
+def process_speech(party,speech_name, folder_path):
+
+    print("\n" + "=" * 60)
+    print(f"Processing: {speech_name}")
+    print(f"Folder: {folder_path}")
+    print("=" * 60)
+
+    # --------------------------------------------------------
+    # Get all chunk files
+    # --------------------------------------------------------
+
+    chunk_files = [
+        f for f in os.listdir(folder_path)
+        if f.endswith(".txt")
+    ]
+
+    chunk_files.sort(
+        key=lambda f: int(
+            f.replace("chunk_", "").replace(".txt", "")
+        )
     )
 
-    print(f"Found {len(speech_folders)} speech folders")
+    print("\n" + "=" * 60)
+    
+    print(f"Speech: {speech_name}")
+    print(f"Chunks: {len(chunk_files)}")
+    print("=" * 60)
 
-    for speech_folder in speech_folders:
+     
+    detailed_results=[]
+    for i, chunk_file in enumerate(chunk_files, start=1):
 
-        speech_name = speech_folder.name
+        print(
+            f"\nClassifying {chunk_file} "
+            f"({i}/{len(chunk_files)})..."
+        )
 
-        csv_file = RESULTS_FOLDER / f"{speech_name}_detailed.csv"
+        chunk_path = os.path.join(folder_path, chunk_file)
 
-        if not csv_file.exists():
-            print(f"NO CSV: {speech_name}")
+        with open(chunk_path, "r", encoding="utf-8") as f:
+            text = f.read()
+
+        response = classify_chunk(text)
+        if response==None:
+            print(f"Skipping {chunk_file} because classification failed.")
             continue
-
-        print(f"Recovering: {party} -> {speech_name}")
-
-        detailed_df = pd.read_csv(csv_file)
-
-        for _, row in detailed_df.iterrows():
-
-            chunk_file = str(row["Chunk"])
-            chunk_path = speech_folder / chunk_file
-
-            if not chunk_path.exists():
-                print(f"  WARNING: Missing {chunk_path}")
-                continue
-
-            # Read actual chunk text
-            with open(chunk_path, "r", encoding="utf-8") as f:
-                chunk_text = f.read().strip()
-
-            all_rows.append({
-                "id": "",
-                "party": party,
-                "speaker": "",
-                "speech": speech_name,
-                "chunk": chunk_text,
-
-                "annotator_1_primary": "",
-                "annotator_1_secondary": "",
-                "annotator_2_primary": "",
-                "annotator_2_secondary": "",
-                "annotator_3_primary": "",
-                "annotator_3_secondary": "",
-
-                "annotators_primary_agreement": "",
-                "annotators_secondary_agreement": "",
-
-                "GPT model": "",
-                "GPT_primary": "",
-                "GPT_secondary": "",
-
-                "GEMINI model": "gemini-3.1-flash-lite",
-                "GEMINI_primary": row["Primary_Category"],
-                "GEMINI_secondary": row["Secondary_Category"],
-
-                "LLAMA model": "",
-                "LLAMA_primary": "",
-                "LLAMA_secondary": ""
-            })
+        print("Response:", response)
 
 
-# Create dataframe
-new_df = pd.DataFrame(all_rows, columns=COLUMNS)
 
-# Give every row a unique ID
-new_df["id"] = range(1, len(new_df) + 1)
+        # Wait between requests
+        time.sleep(8)
 
-# Save Excel
-new_df.to_excel(EXCEL_FILE, index=False)
+        # ----------------------------------------------------
+        # Extract categories
+        # ----------------------------------------------------
+        
+        # ----------------------------------------------------
+# Extract categories and reasons
+# ----------------------------------------------------
 
-print("\n" + "=" * 70)
-print("RECOVERY COMPLETE")
-print("=" * 70)
+    main_cat = None
+    secondary_cat = None
+    main_reason = None
+    secondary_reason = None
 
-print(f"Total rows: {len(new_df)}")
-print("\nRows by party:")
-print(new_df["party"].value_counts())
+    for line in response.splitlines():
+        line = line.strip()
 
-print("\nExcel saved to:")
-print(EXCEL_FILE)
+        if line.startswith("Main:"):
+            main_cat = line.replace("Main:", "", 1).strip()
+
+        elif line.startswith("Main reason:"):
+            main_reason = line.replace("Main reason:", "", 1).strip()
+
+        elif line.startswith("Secondary:"):
+            secondary_cat = line.replace("Secondary:", "", 1).strip()
+
+        elif line.startswith("Secondary reason:"):
+            secondary_reason = line.replace("Secondary reason:", "", 1).strip()
+
+
+        # Validate categories
+        if main_cat not in CATEGORIES:
+            print(f"WARNING: Invalid category returned: {main_cat}")
+            main_cat = "Others"
+
+        if secondary_cat == "None":
+            secondary_cat = None
+            secondary_reason = None
+
+        elif secondary_cat not in CATEGORIES:
+            print(f"WARNING: Invalid secondary category: {secondary_cat}")
+            secondary_cat = None
+            secondary_reason = None
+
+        if main_cat == "Others":
+            main_reason = None
+                            
+                
+
+        detailed_results.append({
+        "Chunk": chunk_file,
+        "Primary_Category": main_cat,
+        "Primary_Reason": main_reason,
+        "Secondary_Category": secondary_cat,
+        "Secondary_Reason": secondary_reason
+    })
+
         
 
+        time.sleep(8)
 
-    # count = Counter(main_categories)
+    os.makedirs("results", exist_ok=True)
+        
+    output_base = Path("results/rally_results") / speech_name
 
-    # total = len(main_categories)
+    output_base.parent.mkdir(parents=True, exist_ok=True)
 
-    # summary_data = []
+    detailed_df = pd.DataFrame(detailed_results)
+    detailed_df.to_csv(f"{output_base}_detailed.csv", index=False, encoding="utf-8-sig")
+    return detailed_results
 
-    # for category in CATEGORIES:
+#SAVE RESULTS
 
-    #     num = count.get(category, 0)
 
-    #     if total > 0:
-    #         percentage = round(
-    #             (num / total) * 100,
-    #             2
-    #         )
-    #     else:
-    #         percentage = 0
 
-    #     summary_data.append([
-    #         category,
-    #         num,
-    #         percentage
-    #     ])
+# SAVE RESULTS
 
-    # summary_df = pd.DataFrame(
-    #     summary_data,
-    #     columns=[
-    #         "Category",
-    #         "Main_Count",
-    #         "Secondary_Count"
-    #         "Percentage (%)"
-    #     ]
-    # )
+BASE_FOLDER = "/Users/ctrl2/Desktop/oelp_hindi/chunks/speeches"
 
-    # summary_df.to_csv(
-    #     f"{output_base}_summary.csv",
-    #     index=False,
-    #     encoding="utf-8-sig"
-    # )
-    # print("\n" + "=" * 60)
-    # print(f"Completed: {speech_name}")
-    # print(f"Total chunks: {total}")
-    # print("=" * 60)
+for party in ["NDA"]:
 
-    # print(summary_df)
+    party_folder = os.path.join(BASE_FOLDER, party)
+
+    if not os.path.exists(party_folder):
+        print(f"\nWARNING: Folder not found: {party_folder}")
+        continue
+
+    speech_folders = [
+        folder for folder in os.listdir(party_folder)
+        if os.path.isdir(os.path.join(party_folder, folder))
+    ]
+
+    print(f"\nFound {len(speech_folders)} speeches for {party}")
+
+    for speech_name in sorted(speech_folders):
+        detailed_csv = (
+        Path("results") / "rally_results" /
+        f"{speech_name}_detailed.csv"
+        )
+
+        # Skip speech if it has already been classified
+        if detailed_csv.exists():
+            print(f"[SKIP] Already classified: {speech_name}")
+            continue 
+
+        speech_folder = os.path.join(party_folder, speech_name)
+
+        detailed_results = process_speech(
+            party=party,
+            speech_name=speech_name,
+            folder_path=speech_folder
+        )
+
+       
+# ============================================================
+
+
+    
+
+
+    
+
+
+
+   
 
 
 
