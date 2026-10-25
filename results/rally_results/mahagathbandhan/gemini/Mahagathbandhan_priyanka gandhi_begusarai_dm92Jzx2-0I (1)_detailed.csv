@@ -1,20 +1,39 @@
 ﻿Chunk,Primary_Category,Secondary_Category
+chunk_1.txt,Content about the Opposition party,
 chunk_1.txt,Content about the Opposition party,Governance
-chunk_2.txt,Governance,Content about the Opposition party
-chunk_3.txt,Content about the Opposition party,Welfare and Funds
-chunk_4.txt,Governance,Content about the Opposition party
+chunk_2.txt,Employement and jobs,
+chunk_2.txt,Employement and jobs,Content about the Opposition party
+chunk_3.txt,Employement and jobs,
+chunk_3.txt,Employement and jobs,Content about the Opposition party
+chunk_4.txt,Governance,
+chunk_4.txt,Governance,Employement and jobs
+chunk_5.txt,Social justice and Deprived communities,
 chunk_5.txt,Social justice and Deprived communities,Content about the Opposition party
+chunk_6.txt,Social justice and Deprived communities,
 chunk_6.txt,Social justice and Deprived communities,Content about the Opposition party
-chunk_7.txt,Women Empowerment,Governance
-chunk_8.txt,Content about the Opposition party,Women Empowerment
-chunk_9.txt,Women Empowerment,Education
-chunk_10.txt,Women Empowerment,Governance
-chunk_11.txt,Education,Governance
+chunk_7.txt,Women Development,
+chunk_7.txt,Women Development,Social justice and Deprived communities
+chunk_8.txt,Content about the Opposition party,
+chunk_8.txt,Content about the Opposition party,Welfare and Funds
+chunk_9.txt,Women Development,
+chunk_9.txt,Women Development,Education
+chunk_10.txt,Women Development,
+chunk_10.txt,Women Development,Governance
+chunk_11.txt,Employement and jobs,
+chunk_11.txt,Employement and jobs,Content about the Opposition party
+chunk_12.txt,Welfare and Funds,
 chunk_12.txt,Welfare and Funds,Social justice and Deprived communities
-chunk_13.txt,Women Empowerment,Health
-chunk_14.txt,Welfare and Funds,Education
+chunk_13.txt,Welfare and Funds,
+chunk_13.txt,Welfare and Funds,Health
+chunk_14.txt,Employement and jobs,
+chunk_14.txt,Employement and jobs,Education
+chunk_15.txt,Social justice and Deprived communities,
 chunk_15.txt,Social justice and Deprived communities,Education
-chunk_16.txt,Law and Order,Governance
+chunk_16.txt,Law and Order,
+chunk_16.txt,Law and Order,Employement and jobs
+chunk_17.txt,Content about the Opposition party,
 chunk_17.txt,Content about the Opposition party,Governance
-chunk_18.txt,Governance,Social justice and Deprived communities
-chunk_19.txt,Women Empowerment,Social justice and Deprived communities
+chunk_18.txt,Governance,
+chunk_18.txt,Governance,
+chunk_19.txt,Women Development,
+chunk_19.txt,Women Development,Social justice and Deprived communities

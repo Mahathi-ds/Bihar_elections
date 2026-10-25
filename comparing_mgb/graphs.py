@@ -4,20 +4,20 @@ import pandas as pd
 from pathlib import Path
 CATEGORIES = [
     "Agriculture and Farmers",
-    "Women’s Development",
-    "Education",
-    "Women Empowerment",
-    "Health",
-    "Governance",
-    "Infrastructure",
-    "Religion and Culture",
-    "Social justice and Deprived communities",
-    "Law and Order",
-    "Welfare and Funds",
-    "Divyang Welfare",
-    "Already executed promises",
-    "Content about the Opposition party",
-    "Others"
+        "Employement and jobs",
+        "Education",
+        "Women Development",
+        "Health",
+        "Governance",
+        "Infrastructure",
+        "Religion and Culture",
+        "Social justice and Deprived communities",
+        "Law and Order",
+        "Welfare and Funds",
+        "Divyang Welfare",
+        "Already executed promises",
+        "Content about the Opposition party",
+        "Others"
 ]
 
 manifesto_path = Path(
@@ -29,33 +29,33 @@ rally_pooled_path=Path("results/rally_results/mahagathbandhan/MGB_pooled_rally_s
 manifesto_df = pd.read_csv(manifesto_path)
 rally_pooled_df = pd.read_csv(rally_pooled_path)
 # Ensure both have categories in the same order
-# manifesto_df = manifesto_df.set_index("Category").reindex(CATEGORIES)
-# rally_pooled_df = rally_pooled_df.set_index("Category").reindex(CATEGORIES)
+manifesto_df = manifesto_df.set_index("Category").reindex(CATEGORIES)
+rally_pooled_df = rally_pooled_df.set_index("Category").reindex(CATEGORIES)
 
-# categories = CATEGORIES
+categories = CATEGORIES
 
-# manifesto = manifesto_df["Percentage (%)"].fillna(0)
-# rallies = rally_pooled_df["Percentage (%)"].fillna(0)
+manifesto = manifesto_df["Percentage (%)"].fillna(0)
+rallies = rally_pooled_df["Percentage (%)"].fillna(0)
 
-# x = np.arange(len(categories))
-# width = 0.35
+x = np.arange(len(categories))
+width = 0.35
 
-# plt.figure(figsize=(16, 7))
+plt.figure(figsize=(16, 7))
 
-# plt.bar(x - width/2, manifesto, width, label="Manifesto")
-# plt.bar(x + width/2, rallies, width, label="Rallies")
+plt.bar(x - width/2, manifesto, width, label="Manifesto")
+plt.bar(x + width/2, rallies, width, label="Rallies")
 
-# plt.xticks(x, categories, rotation=60, ha="right")
-# plt.ylabel("Percentage (%)")
-# plt.title("MGB Manifesto vs Rally Speeches")
-# plt.legend()
+plt.xticks(x, categories, rotation=60, ha="right")
+plt.ylabel("Percentage (%)")
+plt.title("MGB Manifesto vs Rally Speeches")
+plt.legend()
 
 
-# Path("results_charts").mkdir(parents=True, exist_ok=True)
+Path("results_charts").mkdir(parents=True, exist_ok=True)
 
-# plt.tight_layout()
-# plt.savefig("results_charts/MGB_manifesto_vs_rallies.png", dpi=300, bbox_inches="tight")
-# plt.show()
+plt.tight_layout()
+plt.savefig("results_charts/MGB_manifesto_vs_rallies.png", dpi=300, bbox_inches="tight")
+plt.show()
 
 
 ###########################    probability distribution   ############################

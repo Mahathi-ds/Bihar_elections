@@ -6,9 +6,9 @@ from pathlib import Path
 
 CATEGORIES = [
     "Agriculture and Farmers",
-    "Women’s Development",
+    "Employement and jobs",
     "Education",
-    "Women Empowerment",
+    "Women Development",
     "Health",
     "Governance",
     "Infrastructure",
@@ -22,10 +22,11 @@ CATEGORIES = [
     "Others"
 ]
 
-for party in ["Mahagathbandhan"]:
-    # detailed_folder = Path("results/rally_results") / party / "gemini"
+for party in ["mahagathbandhan"]:
+    # global_total=0
+    detailed_folder = Path("results/rally_results") / party / "gemini"
 
-    detailed_folder=Path("results/manifesto_results/gemini")
+    # detailed_folder=Path("results/rally_results/gemini")
 
     summary_folder = (
         Path("results/rally_results")
@@ -88,7 +89,8 @@ for party in ["Mahagathbandhan"]:
             index=False,
             encoding="utf-8-sig"
         )
-
+        global_total+=total
         print(f"\nCompleted: {speech_name}")
         print(f"Total classified chunks: {total}")
         print(f"Saved: {output_path}")
+    print(f"Total {global_total} chunks")

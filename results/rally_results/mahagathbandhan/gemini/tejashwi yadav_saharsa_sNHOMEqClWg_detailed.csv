@@ -1,27 +1,53 @@
 ﻿Chunk,Primary_Category,Secondary_Category
+chunk_1.txt,Social justice and Deprived communities,
 chunk_1.txt,Social justice and Deprived communities,Content about the Opposition party
 chunk_2.txt,Education,
+chunk_2.txt,Education,
 chunk_3.txt,Already executed promises,
-chunk_4.txt,Already executed promises,
+chunk_3.txt,Already executed promises,
+chunk_4.txt,Employement and jobs,
+chunk_4.txt,Employement and jobs,
 chunk_5.txt,Already executed promises,
+chunk_5.txt,Already executed promises,
+chunk_6.txt,Infrastructure,
 chunk_6.txt,Infrastructure,Law and Order
 chunk_7.txt,Law and Order,
+chunk_7.txt,Law and Order,Others
 chunk_8.txt,Already executed promises,
-chunk_9.txt,Health,Education
-chunk_10.txt,Women Empowerment,Health
+chunk_8.txt,Already executed promises,
+chunk_9.txt,Women Development,
+chunk_9.txt,Women Development,Education
+chunk_10.txt,Women Development,
+chunk_10.txt,Women Development,Health
 chunk_11.txt,Already executed promises,
-chunk_12.txt,Health,Women Empowerment
-chunk_13.txt,Women Empowerment,Law and Order
+chunk_11.txt,Already executed promises,
+chunk_12.txt,Women Development,
+chunk_12.txt,Women Development,Health
+chunk_13.txt,Women Development,
+chunk_13.txt,Women Development,Law and Order
+chunk_14.txt,Law and Order,
 chunk_14.txt,Law and Order,Content about the Opposition party
 chunk_15.txt,Content about the Opposition party,
+chunk_15.txt,Content about the Opposition party,Others
+chunk_16.txt,Health,
 chunk_16.txt,Health,Law and Order
-chunk_17.txt,Law and Order,Health
+chunk_17.txt,Health,
+chunk_17.txt,Health,Law and Order
 chunk_18.txt,Health,
-chunk_19.txt,Health,Welfare and Funds
+chunk_18.txt,Health,
+chunk_19.txt,Health,
+chunk_19.txt,Health,
+chunk_20.txt,Health,
 chunk_20.txt,Health,Content about the Opposition party
 chunk_21.txt,Law and Order,
+chunk_21.txt,Law and Order,
+chunk_22.txt,Law and Order,
 chunk_22.txt,Law and Order,
 chunk_23.txt,Religion and Culture,
+chunk_23.txt,Religion and Culture,
+chunk_24.txt,Religion and Culture,
 chunk_24.txt,Religion and Culture,Content about the Opposition party
+chunk_25.txt,Religion and Culture,
 chunk_25.txt,Religion and Culture,Content about the Opposition party
-chunk_26.txt,Content about the Opposition party,Religion and Culture
+chunk_26.txt,Content about the Opposition party,
+chunk_26.txt,Content about the Opposition party,Governance

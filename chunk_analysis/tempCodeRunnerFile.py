@@ -1,1 +1,1 @@
-    # print(f"{group}: Selected {count}/{N_PER_GROUP} chunks")
+    detailed_folder = Path("results/rally_results") / party / "gemini"

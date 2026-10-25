@@ -1,10 +1,19 @@
 ﻿Chunk,Primary_Category,Secondary_Category
-chunk_1.txt,Content about the Opposition party,Governance
-chunk_2.txt,Content about the Opposition party,Governance
-chunk_3.txt,Content about the Opposition party,Governance
-chunk_4.txt,Content about the Opposition party,Education
-chunk_5.txt,Education,Content about the Opposition party
+chunk_1.txt,Employement and jobs,
+chunk_1.txt,Employement and jobs,Content about the Opposition party
+chunk_2.txt,Employement and jobs,
+chunk_2.txt,Employement and jobs,Content about the Opposition party
+chunk_3.txt,Employement and jobs,
+chunk_3.txt,Employement and jobs,Content about the Opposition party
+chunk_4.txt,Employement and jobs,
+chunk_4.txt,Employement and jobs,Education
+chunk_5.txt,Education,
+chunk_5.txt,Education,Employement and jobs
+chunk_6.txt,Health,
 chunk_6.txt,Health,Social justice and Deprived communities
+chunk_7.txt,Social justice and Deprived communities,
 chunk_7.txt,Social justice and Deprived communities,Content about the Opposition party
-chunk_8.txt,Content about the Opposition party,Social justice and Deprived communities
+chunk_8.txt,Content about the Opposition party,
+chunk_8.txt,Content about the Opposition party,Governance
+chunk_9.txt,Content about the Opposition party,
 chunk_9.txt,Content about the Opposition party,Governance

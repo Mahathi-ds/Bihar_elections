@@ -13,7 +13,7 @@ import google.generativeai as genai
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("gemini_api_key_new"))
+genai.configure(api_key=os.getenv("gemini_key_1424"))
 
 model = genai.GenerativeModel("gemini-3.1-flash-lite")
 
@@ -24,9 +24,9 @@ model = genai.GenerativeModel("gemini-3.1-flash-lite")
 
 CATEGORIES = [
     "Agriculture and Farmers",
-    "Women’s Development",
+    "Employement and jobs",
     "Education",
-    "Women Empowerment",
+    "Women Development",
     "Health",
     "Governance",
     "Infrastructure",
@@ -70,11 +70,7 @@ def classify_chunk(text):
     - Both categories MUST be exactly from the list above.
     - Do not invent, modify, or combine category names.
     - If there is no clear second category, write "Secondary: None".
-    -Also mention the follwoing clearly
-       1) Main reason:mention the texts directly from the chunk which made the chunk classified into that particular category primarily
-       2)secondary reason:mention the texts directly from the chunk which made the chunk classified into that particular category primarily
-    -Leave the secondary reason "None" if there is not secondary category 
-    -Leave both Main reason and secondary reason "None" when the category is "Others"
+    
     
 
     About the category "Already executed promises":
@@ -90,9 +86,7 @@ def classify_chunk(text):
 
     Format:
     Main: Category Name
-    Main reason:Reason
     Secondary: Category Name
-    Secondary reason: Reason
 
 
     Examples:
@@ -101,9 +95,7 @@ def classify_chunk(text):
     Secondary: Welfare and Funds
 
     Main: Already executed promises
-    Main reason:Reason
     Secondary: None
-    Secondary reason: None
 
     """
 
@@ -119,6 +111,8 @@ def classify_chunk(text):
 
 
 def process_speech(party,speech_name, folder_path):
+
+    
 
     print("\n" + "=" * 60)
     print(f"Processing: {speech_name}")
@@ -179,61 +173,52 @@ def process_speech(party,speech_name, folder_path):
 # Extract categories and reasons
 # ----------------------------------------------------
 
-    main_cat = None
-    secondary_cat = None
-    main_reason = None
-    secondary_reason = None
+        main_cat = None
+        secondary_cat = None
 
-    for line in response.splitlines():
-        line = line.strip()
+        for line in response.splitlines():
+            line = line.strip()
 
-        if line.startswith("Main:"):
-            main_cat = line.replace("Main:", "", 1).strip()
+            if line.startswith("Main:"):
+                main_cat = line.replace("Main:", "", 1).strip()
 
-        elif line.startswith("Main reason:"):
-            main_reason = line.replace("Main reason:", "", 1).strip()
+            # elif line.startswith("Main reason:"):
+            #     main_reason = line.replace("Main reason:", "", 1).strip()
 
-        elif line.startswith("Secondary:"):
-            secondary_cat = line.replace("Secondary:", "", 1).strip()
+            elif line.startswith("Secondary:"):
+                secondary_cat = line.replace("Secondary:", "", 1).strip()
 
-        elif line.startswith("Secondary reason:"):
-            secondary_reason = line.replace("Secondary reason:", "", 1).strip()
+            # elif line.startswith("Secondary reason:"):
+            #     secondary_reason = line.replace("Secondary reason:", "", 1).strip()
 
 
-        # Validate categories
-        if main_cat not in CATEGORIES:
-            print(f"WARNING: Invalid category returned: {main_cat}")
-            main_cat = "Others"
+            # Validate categories
+            if main_cat not in CATEGORIES:
+                print(f"WARNING: Invalid category returned: {main_cat}")
+                main_cat = "Others"
 
-        if secondary_cat == "None":
-            secondary_cat = None
-            secondary_reason = None
+            if secondary_cat == "None":
+                secondary_cat = None
 
-        elif secondary_cat not in CATEGORIES:
-            print(f"WARNING: Invalid secondary category: {secondary_cat}")
-            secondary_cat = None
-            secondary_reason = None
+          
+                                
+                    
 
-        if main_cat == "Others":
-            main_reason = None
-                            
-                
+            detailed_results.append({
+            "Chunk": chunk_file,
+            "Primary_Category": main_cat,
+            # "Primary_Reason": main_reason,
+            "Secondary_Category": secondary_cat,
+            # "Secondary_Reason": secondary_reason
+        })
 
-        detailed_results.append({
-        "Chunk": chunk_file,
-        "Primary_Category": main_cat,
-        "Primary_Reason": main_reason,
-        "Secondary_Category": secondary_cat,
-        "Secondary_Reason": secondary_reason
-    })
+            
 
-        
-
-        time.sleep(8)
+            time.sleep(8)
 
     os.makedirs("results", exist_ok=True)
         
-    output_base = Path("results/rally_results") / speech_name
+    output_base = Path("results/rally_results/mahagathbandhan/gemini") / speech_name
 
     output_base.parent.mkdir(parents=True, exist_ok=True)
 
@@ -249,7 +234,7 @@ def process_speech(party,speech_name, folder_path):
 
 BASE_FOLDER = "/Users/ctrl2/Desktop/oelp_hindi/chunks/speeches"
 
-for party in ["NDA"]:
+for party in ["Mahagathbandhan"]:
 
     party_folder = os.path.join(BASE_FOLDER, party)
 
@@ -266,7 +251,7 @@ for party in ["NDA"]:
 
     for speech_name in sorted(speech_folders):
         detailed_csv = (
-        Path("results") / "rally_results" /
+        Path("results") / "rally_results" /"mahagathbandhan"/"gemini"/
         f"{speech_name}_detailed.csv"
         )
 

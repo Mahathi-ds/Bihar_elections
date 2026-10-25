@@ -1,59 +1,117 @@
 ﻿Chunk,Primary_Category,Secondary_Category
-chunk_1.txt,Content about the Opposition party,Governance
+chunk_1.txt,Employement and jobs,
+chunk_1.txt,Employement and jobs,Content about the Opposition party
+chunk_2.txt,Welfare and Funds,
 chunk_2.txt,Welfare and Funds,Content about the Opposition party
-chunk_3.txt,Welfare and Funds,Infrastructure
+chunk_3.txt,Employement and jobs,
+chunk_3.txt,Employement and jobs,Infrastructure
+chunk_4.txt,Others,
 chunk_4.txt,Others,
 chunk_5.txt,Content about the Opposition party,
-chunk_6.txt,Content about the Opposition party,Others
-chunk_7.txt,Content about the Opposition party,Governance
+chunk_5.txt,Content about the Opposition party,Governance
+chunk_6.txt,Content about the Opposition party,
+chunk_6.txt,Content about the Opposition party,
+chunk_7.txt,Employement and jobs,
+chunk_7.txt,Employement and jobs,Content about the Opposition party
+chunk_8.txt,Law and Order,
 chunk_8.txt,Law and Order,Content about the Opposition party
+chunk_9.txt,Content about the Opposition party,
 chunk_9.txt,Content about the Opposition party,Governance
 chunk_10.txt,Others,
-chunk_11.txt,Content about the Opposition party,Governance
-chunk_12.txt,Content about the Opposition party,Governance
-chunk_13.txt,Welfare and Funds,Women Empowerment
+chunk_10.txt,Others,
+chunk_11.txt,Employement and jobs,
+chunk_11.txt,Employement and jobs,Content about the Opposition party
+chunk_12.txt,Content about the Opposition party,
+chunk_12.txt,Content about the Opposition party,Employement and jobs
+chunk_13.txt,Employement and jobs,
+chunk_13.txt,Employement and jobs,Women Development
 chunk_14.txt,Infrastructure,
-chunk_15.txt,Governance,
+chunk_14.txt,Infrastructure,
+chunk_15.txt,Others,
+chunk_15.txt,Others,
 chunk_16.txt,Content about the Opposition party,
-chunk_17.txt,Content about the Opposition party,Governance
+chunk_16.txt,Content about the Opposition party,
+chunk_17.txt,Content about the Opposition party,
+chunk_17.txt,Content about the Opposition party,Employment and jobs
+chunk_18.txt,Law and Order,
 chunk_18.txt,Law and Order,Education
-chunk_19.txt,Governance,Content about the Opposition party
-chunk_20.txt,Content about the Opposition party,Governance
-chunk_21.txt,Content about the Opposition party,
-chunk_22.txt,Content about the Opposition party,Governance
-chunk_23.txt,Content about the Opposition party,Governance
-chunk_24.txt,Welfare and Funds,Content about the Opposition party
+chunk_19.txt,Employement and jobs,
+chunk_19.txt,Employement and jobs,Infrastructure
+chunk_20.txt,Content about the Opposition party,
+chunk_20.txt,Content about the Opposition party,Health
+chunk_21.txt,Others,
+chunk_21.txt,Others,
+chunk_22.txt,Employement and jobs,
+chunk_22.txt,Employement and jobs,Content about the Opposition party
+chunk_23.txt,Employement and jobs,
+chunk_23.txt,Employement and jobs,Content about the Opposition party
+chunk_24.txt,Employement and jobs,
+chunk_24.txt,Employement and jobs,Welfare and Funds
+chunk_25.txt,Infrastructure,
 chunk_25.txt,Infrastructure,
 chunk_26.txt,Governance,
+chunk_26.txt,Governance,
+chunk_27.txt,Content about the Opposition party,
 chunk_27.txt,Content about the Opposition party,Governance
+chunk_28.txt,Content about the Opposition party,
 chunk_28.txt,Content about the Opposition party,Education
-chunk_29.txt,Content about the Opposition party,Law and Order
+chunk_29.txt,Employement and jobs,
+chunk_29.txt,Employement and jobs,Content about the Opposition party
+chunk_30.txt,Content about the Opposition party,
 chunk_30.txt,Content about the Opposition party,Governance
 chunk_31.txt,Content about the Opposition party,
-chunk_32.txt,Content about the Opposition party,Governance
-chunk_33.txt,Content about the Opposition party,Welfare and Funds
-chunk_34.txt,Welfare and Funds,Women Empowerment
-chunk_35.txt,Governance,Infrastructure
+chunk_31.txt,Content about the Opposition party,
+chunk_32.txt,Employement and jobs,
+chunk_32.txt,Employement and jobs,Content about the Opposition party
+chunk_33.txt,Content about the Opposition party,
+chunk_33.txt,Content about the Opposition party,Employement and jobs
+chunk_34.txt,Employement and jobs,
+chunk_34.txt,Employement and jobs,Welfare and Funds
+chunk_35.txt,Employement and jobs,
+chunk_35.txt,Employement and jobs,Infrastructure
 chunk_36.txt,Others,
+chunk_36.txt,Others,
+chunk_37.txt,Content about the Opposition party,
 chunk_37.txt,Content about the Opposition party,Governance
-chunk_38.txt,Others,
-chunk_39.txt,Content about the Opposition party,Governance
-chunk_40.txt,Content about the Opposition party,Law and Order
-chunk_41.txt,Content about the Opposition party,Infrastructure
+chunk_38.txt,Content about the Opposition party,
+chunk_38.txt,Content about the Opposition party,
+chunk_39.txt,Employement and jobs,
+chunk_39.txt,Employement and jobs,Content about the Opposition party
+chunk_40.txt,Law and Order,
+chunk_40.txt,Law and Order,Employement and jobs
+chunk_41.txt,Content about the Opposition party,
+chunk_41.txt,Content about the Opposition party,Employement and jobs
+chunk_42.txt,Content about the Opposition party,
 chunk_42.txt,Content about the Opposition party,Governance
-chunk_43.txt,Others,
-chunk_44.txt,Content about the Opposition party,Governance
-chunk_45.txt,Content about the Opposition party,Welfare and Funds
-chunk_46.txt,Welfare and Funds,Infrastructure
+chunk_43.txt,Governance,
+chunk_43.txt,Governance,
+chunk_44.txt,Employement and jobs,
+chunk_44.txt,Employement and jobs,Content about the Opposition party
+chunk_45.txt,Welfare and Funds,
+chunk_45.txt,Welfare and Funds,Content about the Opposition party
+chunk_46.txt,Employement and jobs,
+chunk_46.txt,Employement and jobs,Infrastructure
+chunk_47.txt,Others,
 chunk_47.txt,Others,
 chunk_48.txt,Content about the Opposition party,
-chunk_49.txt,Content about the Opposition party,Governance
-chunk_50.txt,Others,
-chunk_51.txt,Content about the Opposition party,Governance
-chunk_52.txt,Welfare and Funds,Women Empowerment
-chunk_53.txt,Welfare and Funds,Content about the Opposition party
+chunk_48.txt,Content about the Opposition party,Governance
+chunk_49.txt,Content about the Opposition party,
+chunk_49.txt,Content about the Opposition party,Health
+chunk_50.txt,Content about the Opposition party,
+chunk_50.txt,Content about the Opposition party,
+chunk_51.txt,Content about the Opposition party,
+chunk_51.txt,Content about the Opposition party,Employement and jobs
+chunk_52.txt,Employement and jobs,
+chunk_52.txt,Employement and jobs,Content about the Opposition party
+chunk_53.txt,Employement and jobs,
+chunk_53.txt,Employement and jobs,Welfare and Funds
+chunk_54.txt,Infrastructure,
 chunk_54.txt,Infrastructure,
 chunk_55.txt,Others,
-chunk_56.txt,Content about the Opposition party,Governance
-chunk_57.txt,Content about the Opposition party,Religion and Culture
+chunk_55.txt,Others,
+chunk_56.txt,Employement and jobs,
+chunk_56.txt,Employement and jobs,Content about the Opposition party
+chunk_57.txt,Content about the Opposition party,
+chunk_57.txt,Content about the Opposition party,Governance
+chunk_58.txt,Others,
 chunk_58.txt,Others,

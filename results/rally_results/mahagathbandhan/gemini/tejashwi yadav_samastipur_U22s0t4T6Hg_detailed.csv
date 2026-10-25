@@ -1,32 +1,63 @@
 ﻿Chunk,Primary_Category,Secondary_Category
+chunk_1.txt,Law and Order,
 chunk_1.txt,Law and Order,Welfare and Funds
-chunk_2.txt,Law and Order,Health
+chunk_2.txt,Health,
+chunk_2.txt,Health,
+chunk_3.txt,Law and Order,
 chunk_3.txt,Law and Order,
 chunk_4.txt,Law and Order,
+chunk_4.txt,Law and Order,
 chunk_5.txt,Law and Order,
+chunk_5.txt,Law and Order,
+chunk_6.txt,Law and Order,
 chunk_6.txt,Law and Order,Religion and Culture
+chunk_7.txt,Law and Order,
 chunk_7.txt,Law and Order,Infrastructure
-chunk_8.txt,Health,Infrastructure
-chunk_9.txt,Law and Order,
+chunk_8.txt,Health,
+chunk_8.txt,Health,Governance
+chunk_9.txt,Others,
+chunk_9.txt,Others,
+chunk_10.txt,Law and Order,
 chunk_10.txt,Law and Order,Governance
+chunk_11.txt,Governance,
 chunk_11.txt,Governance,Religion and Culture
-chunk_12.txt,Governance,Content about the Opposition party
-chunk_13.txt,Others,
-chunk_14.txt,Governance,Agriculture and Farmers
+chunk_12.txt,Content about the Opposition party,
+chunk_12.txt,Content about the Opposition party,Governance
+chunk_13.txt,Content about the Opposition party,
+chunk_13.txt,Content about the Opposition party,Governance
+chunk_14.txt,Governance,
+chunk_14.txt,Governance,
+chunk_15.txt,Content about the Opposition party,
 chunk_15.txt,Content about the Opposition party,Law and Order
 chunk_16.txt,Content about the Opposition party,
+chunk_16.txt,Content about the Opposition party,
 chunk_17.txt,Content about the Opposition party,
+chunk_17.txt,Content about the Opposition party,Governance
+chunk_18.txt,Agriculture and Farmers,
 chunk_18.txt,Agriculture and Farmers,
 chunk_19.txt,Law and Order,
+chunk_19.txt,Law and Order,
+chunk_20.txt,Law and Order,
 chunk_20.txt,Law and Order,
 chunk_21.txt,Law and Order,
+chunk_21.txt,Law and Order,
+chunk_22.txt,Law and Order,
 chunk_22.txt,Law and Order,
 chunk_23.txt,Law and Order,
+chunk_23.txt,Law and Order,
+chunk_24.txt,Law and Order,
 chunk_24.txt,Law and Order,
 chunk_25.txt,Law and Order,
+chunk_25.txt,Law and Order,
 chunk_26.txt,Law and Order,
+chunk_26.txt,Law and Order,
+chunk_27.txt,Law and Order,
 chunk_27.txt,Law and Order,Governance
 chunk_28.txt,Others,
+chunk_28.txt,Others,
 chunk_29.txt,Law and Order,
-chunk_30.txt,Law and Order,Others
+chunk_29.txt,Law and Order,
+chunk_30.txt,Law and Order,
+chunk_30.txt,Law and Order,Infrastructure
+chunk_31.txt,Law and Order,
 chunk_31.txt,Law and Order,

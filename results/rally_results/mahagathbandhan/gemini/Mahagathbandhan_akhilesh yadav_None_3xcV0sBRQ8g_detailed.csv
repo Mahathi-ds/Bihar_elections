@@ -1,26 +1,51 @@
 ﻿Chunk,Primary_Category,Secondary_Category
+chunk_1.txt,Social justice and Deprived communities,
 chunk_1.txt,Social justice and Deprived communities,Content about the Opposition party
-chunk_2.txt,Others,
+chunk_2.txt,Governance,
+chunk_2.txt,Governance,
+chunk_3.txt,Social justice and Deprived communities,
 chunk_3.txt,Social justice and Deprived communities,Content about the Opposition party
 chunk_4.txt,Content about the Opposition party,
-chunk_5.txt,Content about the Opposition party,Social justice and Deprived communities
-chunk_6.txt,Content about the Opposition party,Governance
-chunk_7.txt,Content about the Opposition party,Governance
-chunk_8.txt,Governance,
+chunk_4.txt,Content about the Opposition party,
+chunk_5.txt,Content about the Opposition party,
+chunk_5.txt,Content about the Opposition party,Governance
+chunk_6.txt,Content about the Opposition party,
+chunk_6.txt,Content about the Opposition party,Employement and jobs
+chunk_7.txt,Content about the Opposition party,
+chunk_7.txt,Content about the Opposition party,Employement and jobs
+chunk_8.txt,Others,
+chunk_8.txt,Others,
+chunk_9.txt,Governance,
 chunk_9.txt,Governance,Religion and Culture
-chunk_10.txt,Social justice and Deprived communities,Content about the Opposition party
-chunk_11.txt,Already executed promises,Content about the Opposition party
-chunk_12.txt,Content about the Opposition party,Governance
-chunk_13.txt,Content about the Opposition party,Governance
+chunk_10.txt,Content about the Opposition party,
+chunk_10.txt,Content about the Opposition party,Social justice and Deprived communities
+chunk_11.txt,Employement and jobs,
+chunk_11.txt,Employement and jobs,Content about the Opposition party
+chunk_12.txt,Employement and jobs,
+chunk_12.txt,Employement and jobs,Content about the Opposition party
+chunk_13.txt,Content about the Opposition party,
+chunk_13.txt,Content about the Opposition party,
+chunk_14.txt,Content about the Opposition party,
 chunk_14.txt,Content about the Opposition party,Agriculture and Farmers
+chunk_15.txt,Content about the Opposition party,
 chunk_15.txt,Content about the Opposition party,Welfare and Funds
+chunk_16.txt,Content about the Opposition party,
 chunk_16.txt,Content about the Opposition party,Welfare and Funds
 chunk_17.txt,Content about the Opposition party,
-chunk_18.txt,Content about the Opposition party,Education
-chunk_19.txt,Welfare and Funds,Content about the Opposition party
+chunk_17.txt,Content about the Opposition party,
+chunk_18.txt,Employement and jobs,
+chunk_18.txt,Employement and jobs,Content about the Opposition party
+chunk_19.txt,Welfare and Funds,
+chunk_19.txt,Welfare and Funds,Employement and jobs
+chunk_20.txt,Law and Order,
 chunk_20.txt,Law and Order,Content about the Opposition party
+chunk_21.txt,Social justice and Deprived communities,
 chunk_21.txt,Social justice and Deprived communities,Content about the Opposition party
+chunk_22.txt,Social justice and Deprived communities,
 chunk_22.txt,Social justice and Deprived communities,Content about the Opposition party
-chunk_23.txt,Social justice and Deprived communities,Content about the Opposition party
-chunk_24.txt,Content about the Opposition party,Governance
+chunk_23.txt,Content about the Opposition party,
+chunk_23.txt,Content about the Opposition party,Social justice and Deprived communities
+chunk_24.txt,Others,
+chunk_24.txt,Others,
+chunk_25.txt,Content about the Opposition party,
 chunk_25.txt,Content about the Opposition party,

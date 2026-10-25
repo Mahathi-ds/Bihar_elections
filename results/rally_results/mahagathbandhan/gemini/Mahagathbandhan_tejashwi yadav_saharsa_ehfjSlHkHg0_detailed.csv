@@ -1,17 +1,33 @@
 ﻿Chunk,Primary_Category,Secondary_Category
+chunk_1.txt,Content about the Opposition party,
 chunk_1.txt,Content about the Opposition party,Governance
-chunk_2.txt,Governance,Welfare and Funds
-chunk_3.txt,Governance,Law and Order
-chunk_4.txt,Content about the Opposition party,Governance
+chunk_2.txt,Employement and jobs,
+chunk_2.txt,Employement and jobs,Governance
+chunk_3.txt,Employement and jobs,
+chunk_3.txt,Employement and jobs,Law and Order
+chunk_4.txt,Employement and jobs,
+chunk_4.txt,Employement and jobs,Content about the Opposition party
 chunk_5.txt,Already executed promises,
-chunk_6.txt,Content about the Opposition party,Governance
-chunk_7.txt,Already executed promises,Content about the Opposition party
-chunk_8.txt,Content about the Opposition party,Governance
-chunk_9.txt,Content about the Opposition party,Governance
-chunk_10.txt,Content about the Opposition party,Welfare and Funds
-chunk_11.txt,Welfare and Funds,Content about the Opposition party
-chunk_12.txt,Welfare and Funds,Women Empowerment
-chunk_13.txt,Women Empowerment,Welfare and Funds
+chunk_5.txt,Already executed promises,
+chunk_6.txt,Content about the Opposition party,
+chunk_6.txt,Content about the Opposition party,Employment and jobs
+chunk_7.txt,Employement and jobs,
+chunk_7.txt,Employement and jobs,Content about the Opposition party
+chunk_8.txt,Content about the Opposition party,
+chunk_8.txt,Content about the Opposition party,Employement and jobs
+chunk_9.txt,Content about the Opposition party,
+chunk_9.txt,Content about the Opposition party,Employement and jobs
+chunk_10.txt,Content about the Opposition party,
+chunk_10.txt,Content about the Opposition party,Employement and jobs
+chunk_11.txt,Employement and jobs,
+chunk_11.txt,Employement and jobs,Content about the Opposition party
+chunk_12.txt,Employement and jobs,
+chunk_12.txt,Employement and jobs,Welfare and Funds
+chunk_13.txt,Women Development,
+chunk_13.txt,Women Development,Employement and jobs
 chunk_14.txt,Governance,
-chunk_15.txt,Social justice and Deprived communities,Welfare and Funds
+chunk_14.txt,Governance,
+chunk_15.txt,Employement and jobs,
+chunk_15.txt,Employement and jobs,Social justice and Deprived communities
+chunk_16.txt,Others,
 chunk_16.txt,Others,
