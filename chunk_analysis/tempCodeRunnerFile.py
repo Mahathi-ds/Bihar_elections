@@ -1,1 +1,1 @@
-    detailed_folder = Path("results/rally_results") / party / "gemini"
+    global_total=0

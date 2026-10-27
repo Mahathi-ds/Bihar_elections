@@ -22,12 +22,12 @@ CATEGORIES = [
 ]
 
 # ============================================================
-# MGB MANIFESTO SUMMARY
+# MANIFESTO SUMMARY
 # ============================================================
 
-detailed_csv = Path("results/manifesto_results/gemini/MGB_detailed.csv")
+detailed_csv = Path("results/manifesto_results/gemini/NDA_detailed.csv")
 
-summary_path = Path("results/manifesto_results/gemini/MGB_summary.csv")
+summary_path = Path("results/manifesto_results/gemini/NDA_summary.csv")
 
 # Read already classified chunks
 detailed_df = pd.read_csv(detailed_csv)

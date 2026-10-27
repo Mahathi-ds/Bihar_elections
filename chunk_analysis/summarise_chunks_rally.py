@@ -22,8 +22,8 @@ CATEGORIES = [
     "Others"
 ]
 
-for party in ["mahagathbandhan"]:
-    # global_total=0
+for party in ["NDA"]:
+    global_total=0
     detailed_folder = Path("results/rally_results") / party / "gemini"
 
     # detailed_folder=Path("results/rally_results/gemini")
@@ -45,6 +45,13 @@ for party in ["mahagathbandhan"]:
 
         # Extract speech name from CSV filename
         speech_name = detailed_csv.stem.removesuffix("_detailed")
+        summary_csv = detailed_csv.parent / f"{speech_name}_summary.csv"
+
+        # Skip if summary already exists
+        if summary_csv.exists():
+            print(f"[SKIP] Summary already exists: {speech_name}")
+            continue
+
 
         try:
             detailed_df = pd.read_csv(detailed_csv)

@@ -218,7 +218,7 @@ def process_speech(party,speech_name, folder_path):
 
     os.makedirs("results", exist_ok=True)
         
-    output_base = Path("results/rally_results/mahagathbandhan/gemini") / speech_name
+    output_base = Path("results/rally_results/NDA/gemini") / speech_name
 
     output_base.parent.mkdir(parents=True, exist_ok=True)
 
@@ -234,7 +234,7 @@ def process_speech(party,speech_name, folder_path):
 
 BASE_FOLDER = "/Users/ctrl2/Desktop/oelp_hindi/chunks/speeches"
 
-for party in ["Mahagathbandhan"]:
+for party in ["NDA"]:
 
     party_folder = os.path.join(BASE_FOLDER, party)
 
@@ -251,7 +251,7 @@ for party in ["Mahagathbandhan"]:
 
     for speech_name in sorted(speech_folders):
         detailed_csv = (
-        Path("results") / "rally_results" /"mahagathbandhan"/"gemini"/
+        Path("results") / "rally_results" /"NDA"/"gemini"/
         f"{speech_name}_detailed.csv"
         )
 
