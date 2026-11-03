@@ -1,29 +1,27 @@
-import numpy as np
-from scipy.special import rel_entr
-
-# Align categories in both datasets
 manifesto_df = manifesto_df.set_index("Category").reindex(CATEGORIES)
-pooled_df = rally_pooled_df.set_index("Category").reindex(CATEGORIES)
+rally_pooled_df = rally_pooled_df.set_index("Category").reindex(CATEGORIES)
 
-# Get probability distributions using counts
-P = manifesto_df["Count"].fillna(0).to_numpy(dtype=float)
-Q = rally_pooled_df["Count"].fillna(0).to_numpy(dtype=float)
+categories = CATEGORIES
 
-# Small smoothing value to avoid log(0)
-epsilon = 1e-10
+manifesto = manifesto_df["Percentage (%)"].fillna(0)
+rallies = rally_pooled_df["Percentage (%)"].fillna(0)
 
-P = P + epsilon
-Q = Q + epsilon
+x = np.arange(len(categories))
+width = 0.35
 
-# Normalize so each distribution sums to 1
-P = P / P.sum()
-Q = Q / Q.sum()
+plt.figure(figsize=(16, 7))
 
-# Calculate KL divergence
-kl_manifesto_rally = np.sum(rel_entr(P, Q))
-kl_rally_manifesto = np.sum(rel_entr(Q, P))
+plt.bar(x - width/2, manifesto, width, label="Manifesto")
+plt.bar(x + width/2, rallies, width, label="Rallies")
 
-print("KL Divergence Results")
-print("-------------------------")
-print(f"Manifesto → Rallies: {kl_manifesto_rally:.4f}")
-print(f"Rallies → Manifesto: {kl_rally_manifesto:.4f}")
+plt.xticks(x, categories, rotation=60, ha="right")
+plt.ylabel("Percentage (%)")
+plt.title("MGB Manifesto vs Rally Speeches")
+plt.legend()
+
+
+Path("results_charts").mkdir(parents=True, exist_ok=True)
+
+plt.tight_layout()
+plt.savefig("results_charts/MGB_manifesto_vs_rallies.png", dpi=150, bbox_inches="tight")
+plt.show()

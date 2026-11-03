@@ -1,1 +1,1 @@
-    global_total=0
+m

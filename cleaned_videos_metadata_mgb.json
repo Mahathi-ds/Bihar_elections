@@ -85,7 +85,7 @@
     "url": "https://www.youtube.com/watch?v=3xcV0sBRQ8g",
     "description": "Jamui में Akhilesh Yadav का जनसैलाब! | बिहार चुनाव 2025 LIVE | Jamui Rally | Lokmat Hindi | RC\n\n#akhileshyadav  #JamuiRally #biharelection2025  #tejashwiyadav  #mahagathbandhan  #samajwadiparty  #biharpolitics  #AkhileshInBihar #JamuiLive #lokmathindi \n\n\n\n--------------------------------------------------------------------------------------------------------------------------------------\nलोकमत हिंदी यूट्यूब चैनल पर स्वागत है. यहां आपको Parliament News, Political Insight, Crime news, Latest Political News, Breaking News, In Depth News, एनालिसिस, फीडबैक, मनोरंजन की दुनिया, खेल-खिलाड़ी, सोशल मीडिया का वायरल रायता, फिल्म रिव्यू, खास मुद्दों पर मंथन देखने को मिलेगा. \n\nWelcome to Lokmat Hindi YouTube Channel. Lokmat Hindi channel is all about Latest News, politics news, entertainment news, sports news, social media news, movie reviews, opinion news and more. Lokmat Founded in 1971 by Jawaharlal Darda, it is the largest read Marathi-language newspaper in India. It is also available in an e-paper format and is published in Hindi and English as Lokmat Samachar and the Lokmat Times respectively.\nStay tuned for all the trending news in Hindi, exclusive videos and celebrity interviews.\nलोकमत हिन्दी के वेबसाइट पर जाने के लिए क्लिक करें- \nhttp://www.lokmatnews.in/\nलोकमत हिन्दी को फेसबुक पर फॉलो करने के लिए क्लिक करें- \nhttps://www.facebook.com/LokmatNewsHindi/\nलोकमत हिन्दी को ट्विटर पर फॉलो करने के लिए क्लिक करें-  \nFollow @ https://twitter.com/LokmatNewsHindi\nलोकमत हिन्दी को इंस्टाग्राम पर फॉलो करने के लिए क्लिक करें-\nFollow @ https://www.instagram.com/lokmatnewshindi/",
     "speaker": "akhilesh yadav",
-    "place": null,
+    "place": "jamui",
     "party": "Mahagathbandhan",
     "duration": 25420
   },
@@ -205,7 +205,7 @@
     "url": "https://www.youtube.com/watch?v=tHOpzEhg_R4",
     "description": "Akhilesh Yadav Bihar Election Speech Live: अखिलेश का ये स्पीच बिहार में तहलका मचा दिया ! Rajnagar\n#akhileshyadav #biharelection2025 #madhubani #rajnagar #rjd #livestream #newsnation #dileepgupta \n\nAkhilesh Yadav Bihar Election Speech Live: बिहार चुनाव के दूसरे चरण के प्रचार के लिए अखिलेश यादव मधुबनी के राजनगर पहुंचे. इस दौरान अखिलेश ने NDA और BJP पर जमकर निशाना साधा.\n\nAkhilesh Yadav's Bihar Election Speech Live: Akhilesh Yadav reached Rajnagar in Madhubani for campaigning in the second phase of the Bihar elections. During this time, Akhilesh strongly criticized the NDA and the BJP.\n\nFollow the News Nation channel on WhatsApp: https://whatsapp.com/channel/0029Va56tc61XquQNZnrl61P\n\nSubscribe us on YouTube Channel:  https://www.youtube.com/@NewsNationTV\n\nGet More Updates on: https://www.newsnationtv.com/\nGet More Uttar Pradesh News Updates on:   https://www.youtube.com/@NewsStateTV\nGet More Madhya Pradesh News Updates on: https://www.youtube.com/@NewsStateMPChhattisgarh  \nGet More Bihar News Updates on:  https://www.youtube.com/@newsstatebiharjharkhand  \n\nFollow us on:   \nTwitter : @newsnationtv",
     "speaker": "akhilesh yadav",
-    "place": null,
+    "place": "madhubani",
     "party": "Mahagathbandhan",
     "duration": 42896
   },
@@ -215,7 +215,7 @@
     "url": "https://www.youtube.com/watch?v=t0DFeHwSqwQ",
     "description": "Tejashwi Yadav Speech: Bihar Election 2025 से पहले गुस्से में तेजस्वी यादव, Patna में BJP पर बरसे\n#TejashwiYadav #live #RJD #sasaram #kushwaha #tejashwiyadav #biharelection2025",
     "speaker": "tejashwi yadav",
-    "place": null,
+    "place": "sasaram",
     "party": "Mahagathbandhan",
     "duration": 1178
   },
@@ -265,7 +265,7 @@
     "url": "https://www.youtube.com/watch?v=c_deTEZF-cE",
     "description": "Bihar Live : Rahul Gandhi Public Meeting in Aurangabad, Bihar | Congress Election Campaign 2025\n#RahulGandhi #BiharLive #CongressElectionCampaign2025 \n\n\nClick to subscribe - https://www.youtube.com/YOYOTVKannada\nFacebook - https://www.facebook.com/YOYOTVKANNADA1/\nX (Twitter) - https://x.com/YOYOTVKannada1\nWhatsApp Channel - https://www.whatsapp.com/channel/0029VaAAODM2ZjChZG6cHL3I",
     "speaker": "rahul gandhi",
-    "place": null,
+    "place": "aurangabad",
     "party": "Mahagathbandhan",
     "duration": 33069
   },
@@ -415,7 +415,7 @@
     "url": "https://www.youtube.com/watch?v=NtXYTMPnmyE",
     "description": "Bihar Live : Priyanka Gandhi Public Meeting in Valmiki Nagar, Bihar | Congress Election Campaign 2025\n#PriyankaGandhi #BiharLive #CongressElectionCampaign2025 \n\nClick to subscribe - https://www.youtube.com/YOYOTVKannada\nFacebook - https://www.facebook.com/YOYOTVKANNADA1/\nX (Twitter) - https://x.com/YOYOTVKannada1\nWhatsApp Channel - https://www.whatsapp.com/channel/0029VaAAODM2ZjChZG6cHL3I",
     "speaker": "priyanka gandhi",
-    "place": null,
+    "place": "valmiki nagar",
     "party": "Mahagathbandhan",
     "duration": 29012
   },
@@ -425,7 +425,7 @@
     "url": "https://www.youtube.com/watch?v=KXTsBu_12C8",
     "description": "LIVE: Akhilesh Yadav addresses public rally in Aurangabad | Bhar assembly election 2025\n\n'#live #akhileshyadav #aurangabad #rjd #bharassemblyelection2025 #biharelections",
     "speaker": "akhilesh yadav",
-    "place": null,
+    "place": "aurangabad",
     "party": "Mahagathbandhan",
     "duration": 8710
   },
@@ -475,7 +475,7 @@
     "url": "https://www.youtube.com/watch?v=kKfIdxFNBa0",
     "description": "Akhilesh Yadav Raghunathpur Rally LIVE | Bihar assembly election 2025\n\n\n#live #akhileshyadav #raghunathpur #biharassemblyelection2025",
     "speaker": "akhilesh yadav",
-    "place": null,
+    "place": "raghunathpur",
     "party": "Mahagathbandhan",
     "duration": 2041
   },
@@ -565,7 +565,7 @@
     "url": "https://www.youtube.com/watch?v=KyoW3t85PmE",
     "description": "Public Meeting | Kishanganj, Bihar\n\n#rahulgandhi, #राहुल_गांधी, #biharelection2025 \n\n_\n\nDeclaration:\nThe IP of this video belongs to Rahul Gandhi. Unauthorised usage is prohibited and will be prosecuted. \n\n_\n\n• BJNY Website: https://bharatjodonyayyatra.com/\n• WhatsApp: https://whatsapp.com/channel/0029Va4UV6wEgGfQZv5KY12z   \n• YouTube: https://www.youtube.com/rahulgandhi \n• Facebook: https://www.facebook.com/rahulgandhi \n• Twitter: https://twitter.com/rahulgandhi \n• Instagram: https://www.instagram.com/rahulgandhi",
     "speaker": "rahul gandhi",
-    "place": null,
+    "place": "kishanganj",
     "party": "Mahagathbandhan",
     "duration": 2115
   },
@@ -605,7 +605,7 @@
     "url": "https://www.youtube.com/watch?v=_wBbHw0a5hk",
     "description": "Bihar election 2025 LIVE: Akhilesh Yadav Addresses Public Meeting in Jamui | RJD | SP | Mahagathbandhan | NDA | BJP\n#akhileshyadav #biharelection2025 #biharnews #dainikjagran #todaynews #latestnews #hindinews \n\nAbout Us -\nDainik Jagran is the flagship brand of the company. In today’s dynamic media world, where consumers have an unprecedented array of choices, Dainik Jagran stands out as a brand that is the choice of millions of Indians as they start their day. With a readership of 5.59 cr, it has been the largest read daily of India for the last consecutive 21 rounds of the Indian Readership Survey (IRS). With 37 editions, Dainik Jagran covers 11 states of India. It has also been declared by the World Association of Newspapers (WAN) as the Largest read daily in the world.\n\nFor more Videos visit 👉 https://www.jagrantv.com\n\nFollow us for Breaking News, Sports Coverage, National News, International News, Politics, Current Affairs, Entertainment, Bollywood, Tech, Auto & more!\n\nSubscribe to Dainik Jagran | Click Here ► http://bit.ly/DainikJagran_YT\nDownload the Dainik Jagran Mobile APP: https://jagranapp.page.link/jagranappyoutube\n\nSubscribe now to our Network Channels:\n👉 Jagran Josh: https://www.youtube.com/@jagranjosh\n👉 iNextLive: https://www.youtube.com/@Inextlive\n👉 HerZindagi: https://www.youtube.com/@HerZindagi\n👉 OnlyMyHealth: https://www.youtube.com/@omh\n👉 Jagran HiTech: https://www.youtube.com/@JagranHiTech\n👉 Jagran Business: https://www.youtube.com/@jagranbusiness\n\nFollow us on Social Media:\n👉 Facebook: https://www.facebook.com/dainikjagran/\n👉 Twitter: https://twitter.com/JagranNews\n👉 WhatsApp: https://whatsapp.com/channel/0029Va4cJIODJ6Grlb2TTB3P\nVisit our website - https://www.jagran.com",
     "speaker": "akhilesh yadav",
-    "place": null,
+    "place": "jamui",
     "party": "Mahagathbandhan",
     "duration": 2085
   },
@@ -615,7 +615,7 @@
     "url": "https://www.youtube.com/watch?v=-BNzfBpFzjQ",
     "description": "Bihar election 2025 LIVE: Akhilesh Yadav Addresses Public Meeting in Raghunathpur, Siwan | RJD | SP\n#akhileshyadav #biharelection2025 #biharnews #dainikjagran #todaynews #latestnews #hindinews \n\nAbout Us -\nDainik Jagran is the flagship brand of the company. In today’s dynamic media world, where consumers have an unprecedented array of choices, Dainik Jagran stands out as a brand that is the choice of millions of Indians as they start their day. With a readership of 5.59 cr, it has been the largest read daily of India for the last consecutive 21 rounds of the Indian Readership Survey (IRS). With 37 editions, Dainik Jagran covers 11 states of India. It has also been declared by the World Association of Newspapers (WAN) as the Largest read daily in the world.\n\nFor more Videos visit 👉 https://www.jagrantv.com\n\nFollow us for Breaking News, Sports Coverage, National News, International News, Politics, Current Affairs, Entertainment, Bollywood, Tech, Auto & more!\n\nSubscribe to Dainik Jagran | Click Here ► http://bit.ly/DainikJagran_YT\nDownload the Dainik Jagran Mobile APP: https://jagranapp.page.link/jagranappyoutube\n\nSubscribe now to our Network Channels:\n👉 Jagran Josh: https://www.youtube.com/@jagranjosh\n👉 iNextLive: https://www.youtube.com/@Inextlive\n👉 HerZindagi: https://www.youtube.com/@HerZindagi\n👉 OnlyMyHealth: https://www.youtube.com/@omh\n👉 Jagran HiTech: https://www.youtube.com/@JagranHiTech\n👉 Jagran Business: https://www.youtube.com/@jagranbusiness\n\nFollow us on Social Media:\n👉 Facebook: https://www.facebook.com/dainikjagran/\n👉 Twitter: https://twitter.com/JagranNews\n👉 WhatsApp: https://whatsapp.com/channel/0029Va4cJIODJ6Grlb2TTB3P\nVisit our website - https://www.jagran.com",
     "speaker": "akhilesh yadav",
-    "place": null,
+    "place": "raghunathpur",
     "party": "Mahagathbandhan",
     "duration": 8514
   },
@@ -695,7 +695,7 @@
     "url": "https://www.youtube.com/watch?v=A-BpRgdZYXU",
     "description": "Priyanka Gandhi Speech: बिहार के Valmiki Nagar में Priyanka Gandhi की जनसभा | Bihar Elections 2025\n\n#biharelection2025 #priyankagandhi #congress  #aajtakdigital \n\nआजतक के साथ देखिये देश-विदेश की सभी महत्वपूर्ण और बड़ी खबरें | Watch the latest Hindi \nnews Live on the World's Most Subscribed News Channel on YouTube. \n#LatestNews #Aajtak #HindiNews\n\nAaj Tak News Channel: \nआज तक भारत का सर्वश्रेष्ठ हिंदी न्‍यूज चैनल है । आज तक न्‍यूज चैनल राजनीति, मनोरंजन, बॉलीवुड, व्यापार और खेल में नवीनतम समाचारों को शामिल करता है। आज तक न्‍यूज चैनल की लाइव खबरें एवं ब्रेकिंग न्यूज के लिए बने रहें । \n#hindinews #newsinhindi #hindisamachar #breakingnews #aajtak #samachar #news\nAbout Channel:\nAaj Tak is India's Best Hindi News Channel. Aaj Tak News Channel Covers The Latest News, Breaking News, Politics, Entertainment News, Business News and Sports News. Stay tuned for all the News in Hindi.\nJoin Aaj Tak Whatsapp Channel: https://whatsapp.com/channel/0029Va7Rxc32ER6hBAuIL222\n\nDownload Aaj Tak APP, India’s No.1 Hindi News App: https://aajtak.link/yyJu\n\nSubscribe to Aaj Tak YouTube Channel: https://www.youtube.com/c/aajtak\n\nVisit Aaj Tak website: https://www.aajtak.in/\n\nFollow us on Facebook: https://www.facebook.com/aajtak \n\nFollow us on Twitter: https://twitter.com/aajtak \n\nFollow us on Instagram: https://www.instagram.com/aajtak/\n\n\nSubscribe our other Popular YouTube Channels:\n\nIndia Today: https://www.youtube.com/c/indiatoday \n\nSoSorry: https://www.youtube.com/c/sosorrypolitoons\n\nGood News Today: https://www.youtube.com/c/GoodNewsTodayOfficial\n\nAajTak AI: https://www.youtube.com/channel/UClZU5ouD9LkfgrelmL2auTg",
     "speaker": "priyanka gandhi",
-    "place": null,
+    "place": "valmiki nagar",
     "party": "Mahagathbandhan",
     "duration": 4586
   },
@@ -755,7 +755,7 @@
     "url": "https://www.youtube.com/watch?v=gvrFEwPW8Yk",
     "description": "Bihar Election 2025 के प्रचार के आखिरी दिन Aurangabad में Mahagathbandhan ने अपनी ताकत का बड़ा प्रदर्शन किया। मंच से Akhilesh Yadav ने कहा कि जनता बदलाव चाहती है — इस बार बिहार में नई राजनीति की शुरुआत होगी। जनसभा में उमड़ा जनसैलाब इस बात का संकेत दे रहा है कि मुकाबला अब बेहद दिलचस्प हो चुका है।\n\n#akhileshyadav #biharelection2025 #mahagathbandhan #biharpolitics",
     "speaker": "tejashwi yadav",
-    "place": null,
+    "place": "aurangabad",
     "party": "Mahagathbandhan",
     "duration": 6323
   },
@@ -845,7 +845,7 @@
     "url": "https://www.youtube.com/watch?v=fnndKwln7Jo",
     "description": "Tejashwi Yadav Speech: Bihar Election 2025 से पहले गुस्से में तेजस्वी यादव, Patna में BJP पर बरसे\n#TejashwiYadav #live #RJD #sasaram #kushwaha #tejashwiyadav #biharelection2025",
     "speaker": "tejashwi yadav",
-    "place": null,
+    "place": "sasaram",
     "party": "Mahagathbandhan",
     "duration": 2059
   },

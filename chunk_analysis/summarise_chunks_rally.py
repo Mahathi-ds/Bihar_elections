@@ -22,7 +22,7 @@ CATEGORIES = [
     "Others"
 ]
 
-for party in ["NDA"]:
+for party in ["mahagathbandhan"]:
     global_total=0
     detailed_folder = Path("results/rally_results") / party / "gemini"
 

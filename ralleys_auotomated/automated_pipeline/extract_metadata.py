@@ -78,9 +78,33 @@ PLACE_ALIASES = {
     "patna sahib": ["patna sahib", "पटना साहिब"],
     "sonepur":     ["sonepur", "sonpur", "सोनपुर"],
     "paru":        ["paru", "पारू", "पारु"],
-    "baisi":       ["baisi", "बैसी", "बायसी"]
-
+    "baisi":       ["baisi", "बैसी", "बायसी"],
+    "raghunathpur": ["raghunathpur", "रघुनाथपुर"],
+    "sasaram": ["sasaram", "sahsaram", "सासाराम"],
+    "sitamarhi": ["sitamarhi", "sitamadhi", "सीतामढ़ी", "सीतामढी"],
+    "kaimur": ["kaimur", "kaimoor", "कैमूर", "भभुआ"],
+    "garaul": ["garaul", "goraul", "गोरौल"],
+    "vaishali": ["vaishali", "vaisali", "वैशाली"],
+    "nawada": ["nawada", "navada", "नवादा"],
+    "aurangabad": ["aurangabad", "औरंगाबाद"],
+    "arwal": ["arwal", "arval", "अरवल"],
+    "danapur": ["danapur",  "दानापुर"],
+    "narkatiaganj": ["narkatiaganj", "नरकटियागंज"],
+    "mahua": ["mahua", "mahuaa", "महुआ"],
+    "madhubani": ["madhubani", "मधुबनी"],
+    "gopalganj": ["gopalganj",  "गोपालगंज"],
+    "triveniganj": ["triveniganj",  "त्रिवेणीगंज"],
+    "raghopur": ["raghopur", "राघोपुर"],
+    "goh": ["goh", "गोह"],
+    "siwan": ["siwan", "sivan", "सिवान", "सीवान"],
+    "maner": ["maner", "मनेर"],
+    "barh": ["barh", "badh", "बाढ़", "बाढ़"],
+    "kishanganj": ["kishanganj", "किशनगंज"],
+    "jamui": ["jamui", "जमुई"],
+     "valmiki nagar": ["valmiki nagar","valmikinagar","valmiki nagar","वाल्मीकि नगर","वाल्मीकिनगर","वाल्मिकी नगर","वाल्मिकी नगर"]
 }
+
+
 # SPEAKER_PARTY = {
 
 #     "narendra modi": "BJP",

@@ -2,375 +2,252 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from pathlib import Path
+import seaborn as sns
 
-# ============================================================
-# PATHS
-# ============================================================
+from pathlib import Path
+from scipy.stats import pointbiserialr
 
 BASE = Path.cwd()
 
-# metadata = pd.read_excel("C:/Users/ctrl2/OneDrive/Documents/zonal_metadata_copy.xlsx")
+# ==========================================
+# METADATA FILES FOR BOTH PARTIES
+# ==========================================
 
-# CHART_FOLDER = Path("results_charts/zonal_analysis")
-# CHART_FOLDER.mkdir(parents=True, exist_ok=True)
+METADATA_FILES = {
+    "NDA": "C:/Users/ctrl2/OneDrive/Documents/nda_win_metadata.xlsx",
+    "MGB": "C:/Users/ctrl2/OneDrive/Documents/mgb_win_metadata.xlsx"
+}
 
-# ============================================================
-# READ SUMMARY FILES
-# ============================================================
+# ==========================================
+# PROCESS EACH PARTY SEPARATELY
+# ==========================================
 
-# all_data = []
+for party, metadata_file in METADATA_FILES.items():
 
-# for _, row in metadata.iterrows():
+    print(f"\nProcessing {party}...")
 
-#     zone = row["Zone"]
-#     party = row["Party"].strip().upper()
+    CHART_FOLDER = Path(f"All_about_zones/results_charts/{party.lower()}_win_analysis")
+    CHART_FOLDER.mkdir(parents=True, exist_ok=True)
 
-#     summary_path = Path(str(row["Summary_file"]).strip())
+    # ==========================================
+    # 1. READ METADATA AND SUMMARY FILES
+    # ==========================================
 
-#     if not summary_path.is_absolute():
-#         summary_path = BASE / summary_path
+    metadata = pd.read_excel(metadata_file)
 
-#     df = pd.read_csv(summary_path)
+    # Standardise column names
+    metadata.columns = metadata.columns.str.strip()
 
-#     df["Zone"] = zone
-#     df["Party"] = party
+    metadata["Winning_status"] = pd.to_numeric(
+        metadata["Winning_status"], errors="raise"
+    ).astype(int)
 
-#     all_data.append(df)
+    all_data = []
 
-# data = pd.concat(all_data, ignore_index=True)
+    for _, row in metadata.iterrows():
 
-# zones = metadata["Zone"].unique()
-# categories = data["Category"].unique()
+        path = Path(
+            str(row["Summary_file"]).strip().strip('"').strip("'")
+        )
 
-# ============================================================
-# 1. HEATMAP FOR EACH PARTY
-# ============================================================
+        if not path.is_absolute():
+            path = BASE / path
 
-# for party in ["MGB"]:
+        df = pd.read_csv(path)
 
-#     party_data = data[data["Party"] == party]
+        percentages = dict(
+            zip(df["Category"], df["Percentage (%)"])
+        )
 
-#     heatmap = party_data.pivot(
-#         index="Zone",
-#         columns="Category",
-#         values="Percentage (%)"
-#     )
+        percentages["Zone"] = str(row["Zone"]).strip()
+        percentages["Winning_status"] = row["Winning_status"]
 
-#     heatmap = heatmap.reindex(
-#         index=zones,
-#         columns=categories
-#     )
+        all_data.append(percentages)
 
-#     plt.figure(figsize=(20, 7))
+    data = pd.DataFrame(all_data)
 
-#     plt.imshow(
-#         heatmap,
-#         cmap="YlOrRd",
-#         aspect="auto",
-#         vmin=0,
-#         vmax=40
-#     )
+    categories = [
+        col for col in data.columns
+        if col not in ["Zone", "Winning_status"]
+    ]
 
-#     plt.colorbar(label="Percentage (%)")
+    data[categories] = data[categories].apply(
+        pd.to_numeric, errors="coerce"
+    ).fillna(0)
 
-#     plt.xticks(
-#         range(len(categories)),
-#         categories,
-#         rotation=65,
-#         ha="right"
-#     )
+    print("Total videos:", len(data))
+    print("Winning videos:", sum(data["Winning_status"] == 1))
+    print("Losing videos:", sum(data["Winning_status"] == 0))
 
-#     plt.yticks(range(len(zones)), zones)
+    # ==========================================
+    # 2. ZONE-WISE PERCENTAGE HEATMAP
+    # ==========================================
 
-#     # Display percentage inside each cell
-#     for i in range(len(zones)):
-#         for j in range(len(categories)):
+    heatmap_data = data.set_index("Zone")[categories]
 
-#             value = heatmap.iloc[i, j]
+    heatmap_data.index = [
+        f"{row['Zone']} ({'Won' if row['Winning_status'] == 1 else 'Lost'})"
+        for _, row in data.iterrows()
+    ]
 
-#             if pd.notna(value):
-#                 plt.text(
-#                     j, i,
-#                     f"{value:.1f}",
-#                     ha="center",
-#                     va="center",
-#                     fontsize=9,
-#                     color="white" if value > 25 else "black"
-#                 )
+    plt.figure(figsize=(20, 8))
 
-#     plt.title(f"{party}: Category Distribution Across Zones")
-
-#     plt.tight_layout()
-
-#     plt.savefig(
-#         CHART_FOLDER / f"{party}_heatmap.png",
-#         dpi=300,
-#         bbox_inches="tight"
-#     )
-
-#     plt.show()
-
-
-# ============================================================
-# 2. GROUPED BAR CHART FOR EACH ZONE
-# ============================================================
-
-# for zone in zones:
-
-#     zone_data = data[data["Zone"] == zone]
-
-#     mgb = (
-#         zone_data[zone_data["Party"] == "MGB"]
-#         .set_index("Category")
-#         .reindex(categories)["Percentage (%)"]
-#         .fillna(0)
-#     )
-
-#     # nda = (
-#     #     zone_data[zone_data["Party"] == "NDA"]
-#     #     .set_index("Category")
-#     #     .reindex(categories)["Percentage (%)"]
-#     #     .fillna(0)
-#     # )
-
-#     x = np.arange(len(categories))
-#     width = 0.35
-
-#     plt.figure(figsize=(16, 7))
-
-#     plt.bar(x - width/2, mgb, width, label="MGB")
-#     plt.bar(x + width/2, nda, width, label="NDA")
-
-#     plt.xticks(x, categories, rotation=65, ha="right")
-#     plt.ylabel("Percentage (%)")
-#     plt.title(f"MGB vs NDA: {zone}")
-#     plt.legend()
-
-#     plt.tight_layout()
-
-#     plt.savefig(
-#         CHART_FOLDER / f"{zone}_bar_chart.png",
-#         dpi=300,
-#         bbox_inches="tight"
-#     )
-
-#     plt.show()
-
-
-    
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from pathlib import Path
-
-# ============================================================
-# PATHS
-# ============================================================
-
-metadata=pd.read_excel("C:/Users/ctrl2/OneDrive/Documents/zonal_metadata_copy.xlsx")
-
-CHART_FOLDER = Path("results_charts/zonal_election_analysis")
-CHART_FOLDER.mkdir(parents=True, exist_ok=True)
-
-OUTPUT_FOLDER = Path("results/zonal_analysis")
-OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
-
-# ============================================================
-# READ SUMMARY FILES AND ATTACH WINNING STATUS
-# ============================================================
-
-all_data = []
-
-for _, row in metadata.iterrows():
-
-    party = row["party"].strip().upper()
-
-    summary_path = Path(str(row["summary_file"]).strip())
-
-    df = pd.read_csv(summary_path)
-
-    df["Zone"] = row["zone"]
-    df["Party"] = party
-
-    # Select the corresponding party's winning status
-    if party == "MGB":
-        df["Win_Status"] = int(row["MGB_status"])
-
-    else:
-        df["Win_Status"] = int(row["NDA_status"])
-
-    all_data.append(df)
-
-data = pd.concat(all_data, ignore_index=True)
-
-data.to_csv(
-    OUTPUT_FOLDER / "zonal_topics_with_win_status.csv",
-    index=False
-)
-
-categories = data["Category"].unique()
-
-# ============================================================
-# 1. WINNING VS LOSING ZONES: BAR CHART
-# ============================================================
-
-for party in ["MGB", "NDA"]:
-
-    party_data = data[data["Party"] == party]
-
-    # Average percentage in zones where party won
-    winning = (
-        party_data[party_data["Win_Status"] == 1]
-        .groupby("Category")["Percentage (%)"]
-        .mean()
-        .reindex(categories)
+    sns.heatmap(
+        heatmap_data,
+        annot=True,
+        fmt=".1f",
+        cmap="YlOrRd",
+        linewidths=0.5,
+        vmin=0,
+        vmax=heatmap_data.max().max(),
+        cbar_kws={"label": "Percentage (%)"},
+        annot_kws={"size": 8}
     )
 
-    # Average percentage in zones where party lost
-    losing = (
-        party_data[party_data["Win_Status"] == 0]
-        .groupby("Category")["Percentage (%)"]
-        .mean()
-        .reindex(categories)
+    plt.title(f"{party}: Category Percentages Across All Zones")
+    plt.xlabel("Categories")
+    plt.ylabel("Zones (Election Result)")
+
+    plt.xticks(rotation=65, ha="right")
+    plt.yticks(rotation=0)
+
+    plt.tight_layout()
+
+    plt.savefig(
+        CHART_FOLDER / "1_zone_percentage_heatmap.png",
+        dpi=150,
+        bbox_inches="tight"
     )
 
-    if winning.isna().all() or losing.isna().all():
-        print(f"{party}: Need both winning and losing zones for comparison.")
-        continue
+    plt.close()
+
+    # ==========================================
+    # 3. CORRELATION WITH WINNING STATUS
+    # ==========================================
+
+    correlations = {}
+    p_values = {}
+
+    for category in categories:
+
+        if data[category].nunique() < 2:
+            correlations[category] = np.nan
+            p_values[category] = np.nan
+
+        else:
+            corr, p_value = pointbiserialr(
+                data["Winning_status"],
+                data[category]
+            )
+
+            correlations[category] = corr
+            p_values[category] = p_value
+
+    corr_series = pd.Series(correlations).sort_values()
+
+    plt.figure(figsize=(12, 8))
+
+    colors = [
+        "seagreen" if value > 0 else "indianred"
+        for value in corr_series
+    ]
+
+    bars = plt.barh(
+        corr_series.index,
+        corr_series.values,
+        color=colors
+    )
+
+    for bar, value in zip(bars, corr_series.values):
+
+        if pd.notna(value):
+
+            plt.text(
+                value + (0.02 if value >= 0 else -0.02),
+                bar.get_y() + bar.get_height()/2,
+                f"{value:.2f}",
+                va="center",
+                ha="left" if value >= 0 else "right",
+                fontsize=9
+            )
+
+    plt.axvline(0, color="black", linewidth=1)
+    plt.xlim(-1.1, 1.1)
+
+    plt.xlabel("Correlation with Winning Status")
+    plt.title(f"{party}: Topic Percentage vs Winning Status")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        CHART_FOLDER / "2_category_correlation.png",
+        dpi=150,
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+    # Save correlation and p-value results
+    correlation_results = pd.DataFrame({
+        "Category": categories,
+        "Correlation": [correlations[c] for c in categories],
+        "P_Value": [p_values[c] for c in categories]
+    })
+
+    correlation_results.to_csv(
+        CHART_FOLDER / "correlation_results.csv",
+        index=False
+    )
+
+    # ==========================================
+    # 4. WINNING VS LOSING CATEGORY COMPARISON
+    # ==========================================
+
+    winning = data[
+        data["Winning_status"] == 1
+    ][categories].mean()
+
+    losing = data[
+        data["Winning_status"] == 0
+    ][categories].mean()
 
     x = np.arange(len(categories))
     width = 0.35
 
-    plt.figure(figsize=(16, 7))
+    plt.figure(figsize=(18, 7))
 
     plt.bar(
         x - width/2,
         winning,
         width,
-        label="Winning Zones"
+        label="Winning Zones",
+        color="seagreen"
     )
 
     plt.bar(
         x + width/2,
         losing,
         width,
-        label="Losing Zones"
+        label="Losing Zones",
+        color="indianred"
     )
 
     plt.xticks(x, categories, rotation=65, ha="right")
+
     plt.ylabel("Average Category Percentage (%)")
-    plt.title(f"{party}: Topic Emphasis in Winning vs Losing Zones")
+    plt.title(f"{party}: Topics Spoken in Winning vs Losing Zones")
 
     plt.legend()
     plt.tight_layout()
 
     plt.savefig(
-        CHART_FOLDER / f"{party}_winning_vs_losing.png",
-        dpi=300,
+        CHART_FOLDER / "3_winning_vs_losing.png",
+        dpi=150,
         bbox_inches="tight"
     )
 
-    plt.show()
+    plt.close()
 
+    print(f"Visualisations saved in: {CHART_FOLDER}")
 
-# ============================================================
-# 2. CORRELATION WITH WINNING STATUS
-# ============================================================
-
-correlation_results = []
-
-for party in ["MGB", "NDA"]:
-
-    party_data = data[data["Party"] == party]
-
-    # One row per zone, one column per category
-    pivot_df = party_data.pivot(
-        index="Zone",
-        columns="Category",
-        values="Percentage (%)"
-    )
-
-    # Attach winning status for each zone
-    status = (
-        party_data.groupby("Zone")["Win_Status"]
-        .first()
-    )
-
-    pivot_df["Win_Status"] = status
-
-    for cat in categories:
-
-        # Correlation is undefined when either variable is constant
-        if (
-            pivot_df[cat].nunique() < 2
-            or pivot_df["Win_Status"].nunique() < 2
-        ):
-            corr = np.nan
-        else:
-            corr = pivot_df[cat].corr(pivot_df["Win_Status"])
-
-        correlation_results.append({
-            "Party": party,
-            "Category": cat,
-            "Correlation": corr
-        })
-
-
-corr_df = pd.DataFrame(correlation_results)
-
-corr_df.to_csv(
-    OUTPUT_FOLDER / "topic_win_correlations.csv",
-    index=False
-)
-
-# ============================================================
-# CORRELATION HEATMAP
-# ============================================================
-
-heatmap = corr_df.pivot(
-    index="Party",
-    columns="Category",
-    values="Correlation"
-)
-
-heatmap = heatmap.reindex(
-    index=["MGB", "NDA"],
-    columns=categories
-)
-
-plt.figure(figsize=(17, 4))
-
-plt.imshow(
-    heatmap,
-    cmap="coolwarm",
-    vmin=-1,
-    vmax=1,
-    aspect="auto"
-)
-
-plt.colorbar(label="Correlation with Winning Status")
-
-plt.xticks(
-    range(len(categories)),
-    categories,
-    rotation=65,
-    ha="right"
-)
-
-plt.yticks([0, 1], ["MGB", "NDA"])
-
-plt.title("Correlation Between Topic Emphasis and Electoral Victory")
-
-plt.tight_layout()
-
-plt.savefig(
-    CHART_FOLDER / "topic_win_correlation_heatmap.png",
-    dpi=300,
-    bbox_inches="tight"
-)
-
-plt.show()
-
-print(corr_df)
-
+print("\nAll visualisations generated successfully!")

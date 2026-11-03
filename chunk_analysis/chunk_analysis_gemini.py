@@ -141,7 +141,10 @@ def process_speech(party,speech_name, folder_path):
     print("=" * 60)
 
      
-    detailed_results=[]
+    
+    
+    detailed_results = []
+
     for i, chunk_file in enumerate(chunk_files, start=1):
 
         print(
@@ -155,24 +158,14 @@ def process_speech(party,speech_name, folder_path):
             text = f.read()
 
         response = classify_chunk(text)
-        if response==None:
+
+        if response is None:
             print(f"Skipping {chunk_file} because classification failed.")
             continue
+
         print("Response:", response)
 
-
-
-        # Wait between requests
-        time.sleep(8)
-
-        # ----------------------------------------------------
         # Extract categories
-        # ----------------------------------------------------
-        
-        # ----------------------------------------------------
-# Extract categories and reasons
-# ----------------------------------------------------
-
         main_cat = None
         secondary_cat = None
 
@@ -182,39 +175,28 @@ def process_speech(party,speech_name, folder_path):
             if line.startswith("Main:"):
                 main_cat = line.replace("Main:", "", 1).strip()
 
-            # elif line.startswith("Main reason:"):
-            #     main_reason = line.replace("Main reason:", "", 1).strip()
-
             elif line.startswith("Secondary:"):
                 secondary_cat = line.replace("Secondary:", "", 1).strip()
 
-            # elif line.startswith("Secondary reason:"):
-            #     secondary_reason = line.replace("Secondary reason:", "", 1).strip()
+        # Validate primary category
+        if main_cat not in CATEGORIES:
+            print(f"WARNING: Invalid primary category: {main_cat}")
+            main_cat = "Others"
 
+        # Validate secondary category
+        if secondary_cat == "None" or secondary_cat not in CATEGORIES:
+            secondary_cat = None
 
-            # Validate categories
-            if main_cat not in CATEGORIES:
-                print(f"WARNING: Invalid category returned: {main_cat}")
-                main_cat = "Others"
-
-            if secondary_cat == "None":
-                secondary_cat = None
-
-          
-                                
-                    
-
-            detailed_results.append({
+        # Append exactly ONE row per chunk
+        detailed_results.append({
             "Chunk": chunk_file,
             "Primary_Category": main_cat,
-            # "Primary_Reason": main_reason,
-            "Secondary_Category": secondary_cat,
-            # "Secondary_Reason": secondary_reason
+            "Secondary_Category": secondary_cat
         })
 
-            
+        # Wait between requests
+        time.sleep(8)
 
-            time.sleep(8)
 
     os.makedirs("results", exist_ok=True)
         

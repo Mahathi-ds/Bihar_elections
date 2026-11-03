@@ -1,13 +1,12 @@
 import pandas as pd
 from pathlib import Path
 
-CSV_FOLDER = Path("results/rally_results/mahagathbandhan/gemini")
-CHUNKS_FOLDER = Path("chunks/speeches/Mahagathbandhan")
+CSV_FOLDER = Path("results/rally_results/NDA/gemini")
+CHUNKS_FOLDER = Path("chunks/speeches/NDA")
 
 all_rows = []
 
-for csv_file in sorted(CSV_FOLDER.rglob("*.csv")):
-
+for csv_file in sorted(CSV_FOLDER.rglob("*_detailed.csv")):
     video_name = csv_file.stem.removesuffix("_detailed")
     df = pd.read_csv(csv_file, encoding="utf-8-sig")
 
@@ -44,10 +43,10 @@ combined = pd.DataFrame(
 )
 
 combined.to_excel(
-    "mgb_gemini_classifications.xlsx",
+    "nda_gemini_classifications.xlsx",
     index=False
 )
 
 print("Total chunks:", len(combined))
-print("Saved mgb_gemini_classifications.xlsx")
-print("Excel saved at:", Path("all_gemini_classifications.xlsx").resolve())
+print("Saved nda_gemini_classifications.xlsx")
+print("Excel saved at:", Path("nda_gemini_classifications.xlsx").resolve())
