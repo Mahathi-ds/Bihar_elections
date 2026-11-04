@@ -16,7 +16,7 @@ from openai import OpenAI
 load_dotenv()
 
 client = OpenAI(
-    api_key=os.getenv('qwen_key_tangi'),
+    api_key=os.getenv('qwen_varshini'),
     base_url="https://api.groq.com/openai/v1"
     # base_url = "https://integrate.api.nvidia.com/v1",
 )
